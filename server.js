@@ -20,6 +20,17 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended:true}));
 
+const db = require("/models");
+
+db.sequelize
+    .sync({alter:true})
+    .then(() =>{
+        console.log("Synced db");
+    })
+    .catch((err)=>{
+        console.log("Failed to sync db: " + err.message);
+    })
+
 app.listen(8000,function (req,res){
     console.log("App rodando na porta 8000");
 });
