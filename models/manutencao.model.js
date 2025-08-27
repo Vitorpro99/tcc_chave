@@ -1,4 +1,4 @@
-module.exports = {sequelize,Sequelize} =>{
+module.exports = (sequelize,Sequelize) =>{
     const manutencao = this.sequelize.define("mauntencao",{
         data: {type: this.Sequelize.DATEONLY},
         tipo: {type: this.Sequelize.STRING},

@@ -1,4 +1,4 @@
-module.exports = {sequelize,Sequelize} => {
+module.exports = (sequelize,Sequelize) => {
     const veiculo = this.sequelize.define( "veiculo",{
         marca: {type: this.Sequelize.STRING},
         modelo: {type: this.Sequelize.STRING},

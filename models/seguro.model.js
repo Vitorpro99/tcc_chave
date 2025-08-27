@@ -1,4 +1,4 @@
-module.exports = {sequelize, Sequelize} => {
+module.exports = (sequelize, Sequelize) => {
     const seguro = this.sequelize.define("seguro",{
         numeroApolice: {type: this.Sequelize.INTEGER},
         dataInicio: {type: this.Sequelize.DATEONLY},
