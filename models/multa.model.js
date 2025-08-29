@@ -1,8 +1,8 @@
 module.exports = (sequelize,Sequelize) =>{
-    const multa = this.Sequelize.define("multa",{
-        data: this.Sequelize.DATEONLY,
-        valor: this.Sequelize.DOUBLE,
-        descricao:this.Sequelize.STRING
+    const multa = sequelize.define("multa",{
+        data: Sequelize.DATEONLY,
+        valor: Sequelize.DOUBLE,
+        descricao:Sequelize.STRING
     },
     {
         freezeTableName:true

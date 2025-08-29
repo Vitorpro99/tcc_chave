@@ -1,9 +1,9 @@
 module.exports = (sequelize,Sequelize) =>{
-    const ipva = this.sequelize.define("ipva",{
-        ano: {type: this.Sequelize.STRING},
-        valor: {type: this.Sequelize.DOUBLE},
-        descricao: {type: this.Sequelize.STRING},
-        veiculo: {type: this.Sequelize.STRING}
+    const ipva = sequelize.define("ipva",{
+        ano: {type: Sequelize.STRING},
+        valor: {type: Sequelize.DOUBLE},
+        descricao: {type: Sequelize.STRING},
+        veiculo: {type: Sequelize.STRING}
     },
     {
         freezeTableName: true

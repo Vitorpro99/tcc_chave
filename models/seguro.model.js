@@ -1,13 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
-    const seguro = this.sequelize.define("seguro",{
-        numeroApolice: {type: this.Sequelize.INTEGER},
-        dataInicio: {type: this.Sequelize.DATEONLY},
-        dataFim:{ type: this.Sequelize.DATEONLY},
-        dataInicio: {type: this.Sequelize.DOUBLE},
-        dataFim: {type: this.Sequelize.DOUBLE},
-        status: {type: this.Sequelize.STRING},
-        franquia: {type: this.Sequelize.DOUBLE},
-        tipoSeguro:{ type: this.Sequelize.STRING}
+    const seguro = sequelize.define("seguro",{
+        numeroApolice: {type: Sequelize.INTEGER},
+        dataInicio: {type: Sequelize.DATEONLY},
+        dataFim:{ type: Sequelize.DATEONLY},
+        dataInicio: {type: Sequelize.DOUBLE},
+        dataFim: {type: Sequelize.DOUBLE},
+        status: {type: Sequelize.STRING},
+        franquia: {type: Sequelize.DOUBLE},
+        tipoSeguro:{ type: Sequelize.STRING}
     },
     {
         freezeTableName: true

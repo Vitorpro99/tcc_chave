@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
-    const setor = this.sequelize.define("setor", {
-        nome: {type: this.Sequelize.STRING},
-        veiculos: {type:this.Sequelize.STRING},
+    const setor = sequelize.define("setor", {
+        nome: {type: Sequelize.STRING},
+        veiculos: {type:Sequelize.STRING},
         //gestor
 
     },

@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyPhaser = require("body-phaser")
+const bodyPhaser = require("body-parser")
 const cors = require("cors")
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended:true}));
 
-const db = require("/models");
+const db = require("./models");
 
 db.sequelize
     .sync({alter:true})
