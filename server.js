@@ -20,12 +20,12 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended:true}));
 
-const db = require("./models");
+const db = require("./models")
 
 db.sequelize
     .sync({alter:true})
     .then(() =>{
-        console.log("Synced db");
+        console.log("Ola mundo!");
     })
     .catch((err)=>{
         console.log("Failed to sync db: " + err.message);

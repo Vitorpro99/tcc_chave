@@ -23,6 +23,7 @@ db.ipva     = require("./ipva.model.js") (sequelize, Sequelize);;
 db.manutencao = require("./manutencao.model.js") (sequelize, Sequelize);;
 db.multa    = require("./multa.model.js") (sequelize, Sequelize);;
 db.seguro   = require("./seguro.model.js") (sequelize, Sequelize);
+module.exports = db;
 
 
 // Relação 1:1 entre Usuário e Setor
