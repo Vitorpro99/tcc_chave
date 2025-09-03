@@ -70,15 +70,71 @@ exports.findOne = (req,res) =>{
 };
 
 exports.update = (req,res) =>{
+    const id = req.params.id;
 
+    Veiculo.update(req.body, {
+        where: {id: id},
+    })
+        .then((num)=>{
+            if(num == 1){
+                res.send({
+                    message: "Veiculo atualizado com sucesso."
+                });
+            }
+            else{
+                res.send({
+                    message: `Não foi possivel atualizar o Veiculo com o id= ${id}. Talvez o produto
+                    não tenha sido encontrado ou req.body está vazio!`,
+                })
+            }
+        })
+        .catch((err)=>{
+            res.status(500).send({
+                message:"Erro em atualizar o Veiculo via id=" + id,
+            });
+        });
 };
 
 exports.delete = (req,res) =>{
+    const id = req.params.id;
+
+    Veiculo.destroy({
+        where: { id:id },
+    })
+        .then((num)=>{
+            if(num == 1){
+                res.send({
+                    message: "Veiculo deletado com sucesso!",
+                })
+            }
+            else{
+                res.send({
+                    message: `Não é possivel deletar esse Veiculo. Não encontrado`
+                })
+            }
+        }
+    )
+    .catch((err)=>{
+        res.status(500).send({
+            message:"Não é possivel deletar o Veiculo com o id" + id,
+        })
+    })
 
 };
 
 exports.deleteAll = (req,res) =>{
-
+    Veiculo.destroy({
+        where: {},
+        truncate: false,
+    })
+        .then((nums)=>{
+            res.send({message: `${nums} Veiculos foram deletados com sucesso!` })
+        })
+        .catch((err)=>{
+            res.status(500).send({
+                message: err.message || "Erro enquanto deletava os Veiculos"
+            })
+        })
 };
 
 // exports. = (req,res) =>{
