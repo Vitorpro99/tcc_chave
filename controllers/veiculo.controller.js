@@ -27,7 +27,7 @@ exports.create = (req,res) =>{
         })
         .catch((err)=>{
             res.status(500).send({
-                message: err.message || "Erro durante a criação de Produto"
+                message: err.message || "Erro durante a criação de Veiculo"
             });
         });
 };
