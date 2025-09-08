@@ -17,7 +17,7 @@ exports.create = (req,res) => {
         nome:       req.body.nome,
         senha:      req.body.senha,
         email:      req.body.email,
-        numero_reg: req.body.numeroreg,
+        numero_reg: req.body.numero_reg,
         setor:      req.body.setor,
         gestor:     req.body.gestor
     }

@@ -21,7 +21,7 @@ exports.create = (req,res) =>{
         placa:          req.body.placa
         
     };
-    Produto.create(produto)
+    Veiculo.create(veiculo)
         .then((data)=>{
             res.send(data);
         })
@@ -43,7 +43,7 @@ exports.findAll = (req,res) =>{
         })
         .catch((err)=>{
             res.status(500).send({
-                message: err.message || "Erro durante a procura por Produto",
+                message: err.message || "Erro durante a procura por Veiculo",
             })
         })
 };
@@ -51,7 +51,7 @@ exports.findAll = (req,res) =>{
 exports.findOne = (req,res) =>{
     const id = req.params.id;
 
-    Produto.findByPk(id)
+    Veiculo.findByPk(id)
     .then((data)=>{
         if(data){
             res.send(data);
@@ -83,7 +83,7 @@ exports.update = (req,res) =>{
             }
             else{
                 res.send({
-                    message: `Não foi possivel atualizar o Veiculo com o id= ${id}. Talvez o produto
+                    message: `Não foi possivel atualizar o Veiculo com o id= ${id}. Talvez o Veiculo
                     não tenha sido encontrado ou req.body está vazio!`,
                 })
             } 

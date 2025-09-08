@@ -31,6 +31,14 @@ db.sequelize
         console.log("Failed to sync db: " + err.message);
     })
 
+require("./routes/ipva.routes.js") (app);
+require("./routes/manutencao.routes.js") (app);
+require("./routes/multa.routes.js") (app);
+require("./routes/seguro.routes.js") (app);
+require("./routes/setor.routes.js") (app);
+require("./routes/usuario.routes.js") (app);
+require("./routes/veiculo.routes.js") (app);
+
 app.listen(8000,function (req,res){
     console.log("App rodando na porta 8000");
 });

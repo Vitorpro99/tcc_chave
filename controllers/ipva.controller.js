@@ -1,5 +1,5 @@
 const db = require("../models");
-const Ipva = db.ipva; // Certifique-se que a exportação em /models/index.js está correta
+const Ipva = db.ipva; 
 const Op = db.Sequelize.Op;
 
 // Cria e salva um novo registro de IPVA
@@ -95,6 +95,29 @@ exports.update = (req, res) => {
 };
 
 // Deleta um registro de IPVA pelo ID
+exports.delete = (req, res) => {
+    const id = req.params.id;
+
+    Ipva.destroy({
+        where: { id: id },
+    })
+        .then((num) => {
+            if (num == 1) {
+                res.send({
+                    message: "IPVA deletado com sucesso!",
+                });
+            } else {
+                res.send({
+                    message: `Não foi possível deletar o IPVA com id=${id}. Talvez não tenha sido encontrado.`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Não foi possível deletar o IPVA com id=" + id,
+            });
+        });
+};
 exports.deleteAll = (req, res) => {
     Ipva.destroy({
         where: {},

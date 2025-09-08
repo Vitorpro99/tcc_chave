@@ -15,5 +15,5 @@ module.exports = (app) =>{
 
     router.delete("/",veiculo.deleteAll);
 
-    app.use("/api/veiculos",router);
+    app.use("/veiculos",router);
 };
