@@ -3,7 +3,7 @@ module.exports = (sequelize,Sequelize) =>{
         ano: {type: Sequelize.STRING},
         valor: {type: Sequelize.DOUBLE},
         descricao: {type: Sequelize.STRING},
-        veiculo: {type: Sequelize.STRING}
+        veiculoId: {type: Sequelize.INTEGER}
     },
     {
         freezeTableName: true

@@ -12,13 +12,13 @@ exports.create = (req,res) =>{
         return;
     }
     const veiculo = {
-        marca: req.body.marca,
-        modelo: req.body.modelo,
-        ano: req.body.ano,
-        kilometragem: req.body.kilometragem,
+        marca:          req.body.marca,
+        modelo:         req.body.modelo,
+        ano:            req.body.ano,
+        kilometragem:   req.body.kilometragem,
         // possuidor: {type: Sequelize}
-        dataAquisicao: req.body.data,
-        placa: req.body.placa
+        dataAquisicao:  req.body.data,
+        placa:          req.body.placa
         
     };
     Produto.create(produto)
@@ -42,7 +42,7 @@ exports.findAll = (req,res) =>{
             res.send(data);
         })
         .catch((err)=>{
-            res,status(500).send({
+            res.status(500).send({
                 message: err.message || "Erro durante a procura por Produto",
             })
         })
@@ -64,7 +64,7 @@ exports.findOne = (req,res) =>{
     })
     .catch((err)=>{
         res.status(500).send({
-            message: "Erro na busca por Produto pelo id" + id
+            message: "Erro na busca por Veiculo pelo id" + id
         })
     })
 };
@@ -86,7 +86,7 @@ exports.update = (req,res) =>{
                     message: `Não foi possivel atualizar o Veiculo com o id= ${id}. Talvez o produto
                     não tenha sido encontrado ou req.body está vazio!`,
                 })
-            }
+            } 
         })
         .catch((err)=>{
             res.status(500).send({
