@@ -2,6 +2,39 @@ module.exports = (app) =>{
     const veiculo = require("../controllers/veiculo.controller.js");
 
     var router = require("express").Router();
+    const multer = require("multer");
+         const fs = require("fs");
+         var path = require("path");
+
+         var storage = multer.diskStorage({
+            destination: function(req,file,cb){
+                cb(null,"./uploads/Veiculo");
+            },
+            filename: function(req,file,cb){
+                cb(null,Date.now() + pathextname(file.originalname));
+            }
+         })
+
+    const upload = multer({
+        storage: storage,
+    })
+
+    router.post("/upload/", uploaod.single("file"), (req,res)=>{
+        res.send({
+            upload:true,
+            file: req.file,
+        })
+    });
+    router.get("/upload/:arquivo", (req,res)=>{
+        const arquivo = path.dirname(__dirname) + `/uploads/Veiculo/${req.params.arquivo}`;
+        fs.readFile(arquivo, function(err,data){
+            res.contentType("png");
+            res.send(data);
+        })
+    })
+    
+    
+    
 
     router.post("/",veiculo.create);
     

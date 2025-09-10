@@ -6,7 +6,8 @@ module.exports = (sequelize,Sequelize) => {
         kilometragem: {type: Sequelize.FLOAT},
         // possuidor: {type: Sequelize}
         dataAquisicao: {type: Sequelize.DATEONLY},
-        placa: {type: Sequelize.STRING}
+        placa: {type: Sequelize.STRING},
+        foto: {type: Sequelize.STRING}
     },
     {
         freezeTableName: true
