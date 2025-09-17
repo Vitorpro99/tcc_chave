@@ -4,6 +4,9 @@ const Usuario = db.usuario;
 
 const op = db.Sequelize.Op;
 
+var jwt = require('jsonwebtoken');
+var bycrypt = require('bcryptjs');
+const secretKey = "chavesegredodetoken";
 exports.create = (req,res) => {
 
     if(!req.body.nome){
@@ -15,7 +18,7 @@ exports.create = (req,res) => {
 
     const usuario = {
         nome:       req.body.nome,
-        senha:      req.body.senha,
+        senha:      bycrypt.hashSync(req.body.senha,10),
         email:      req.body.email,
         numero_reg: req.body.numero_reg,
         setor:      req.body.setor,
@@ -137,3 +140,28 @@ exports.deleteAll = (req, res) => {
             });
         });
 };
+exports.login = (req,res) =>{
+    Usuario.findOne({
+        where:{
+            email: req.body.email,
+        },
+    })
+        .then((usuario)=>{
+            if(!usuario){
+                return res.status(404).send({message: "Usuário não encontrado com esse email!"});
+            }
+
+            var passwordIsValid = bycrypt.compareSync(req.body.senha, usuario.senha);
+            if(!passwordIsValid){
+                return res.status(401).send({
+                    accessToken: null,
+                    message: "Senha inválida!"
+                });
+            }
+            var token = jwt.sign({id:usuario.id}, secretKey, { expireIn "1h"});
+        });
+        res.status(200).send({ usuario: usuario, accessToken: token})
+        .catch((err)=>{
+            res.status(500).send({message: "Erro ao logar com o email" + req.body.email});
+        });
+    }
