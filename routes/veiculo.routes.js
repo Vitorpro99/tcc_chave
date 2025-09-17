@@ -19,7 +19,7 @@ module.exports = (app) =>{
         storage: storage,
     })
 
-    router.post("/upload/", uploaod.single("file"), (req,res)=>{
+    router.post("/upload/", upload.single("file"), (req,res)=>{
         res.send({
             upload:true,
             file: req.file,
