@@ -1,0 +1,30 @@
+.body{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.form{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items : center;
+    background-color: rgb(241, 241, 241);
+    padding: 2rem;
+    border: 1px solid #C42020;
+    border-radius: 20px;
+    gap:0.3rem
+    
+}
+.formDiv{
+    width: fit-content;
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: blueviolet; */
+}
+.input{
+    width: 100%;
+    align-self: center;
+    margin-top: 0.5rem; 
+}
