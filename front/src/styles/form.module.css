@@ -15,6 +15,12 @@
     gap:0.3rem
     
 }
+.title{
+    font-size: 2rem;
+    font-weight: 600;
+    color:#8b2c2c;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 .formDiv{
     width: fit-content;
     margin-top: 2rem;
@@ -27,4 +33,51 @@
     width: 100%;
     align-self: center;
     margin-top: 0.5rem; 
+    border-radius: 5px;
+    padding: 0.5rem;
+    border: 1px solid #C42020;
+    font-size: 1rem;
+}
+.inputPlaca{
+
+    width:fit-content;
+    height: 4rem;
+    align-self: center;
+    margin-top: 0.5rem; 
+    border-radius: 5px;
+    /* padding: 0.5rem 2.5rem 0.5rem 0.5rem; */
+    border: 1px transparent ;
+    font-size: 1rem;
+    background-image: url('/placa.png');
+    background-repeat: no-repeat;
+    /* background-position: right 0.5rem center; */
+    background-size: contain;
+    text-align: center;
+}
+.label
+{
+    align-self: flex-start;
+    margin-top: 0.5rem; 
+    font-size: 1.1rem;
+    font-weight: 500;
+    color:#8b2c2c;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.input::placeholder{
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.mainButton{
+    padding:0.5rem;
+    width: 75%;
+    font-size: large;
+    margin-top: 1rem;
+    border: 2px solid #C42020;
+    border-radius: 10px;
+    color: #C42020.
+}
+.mainButton:hover{
+    background-color: #C42020;
+    color: white;
+    cursor: pointer;
 }
