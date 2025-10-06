@@ -43,6 +43,7 @@ export default function Header() {
                         {menuAberto === 'veiculo' && (
                             <ul className={styles.dropdown_menu}>
                                 <li><a href="/veiculo">Cadastro</a></li>
+                                <li><a href="/listaVeiculos">Lista</a></li>
                                 <li><a>Transferências</a></li>
                                 <li><a>Relatórios</a></li>
                             </ul>

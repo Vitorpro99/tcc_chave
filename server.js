@@ -10,7 +10,7 @@ app.get("/", function (req,res){
 
 var corsOptions = {
 
-    origin:"Aqui informar quais urls serão permitidas conectar ao backend"
+    origin:"http://localhost:3000"
 
 }
 

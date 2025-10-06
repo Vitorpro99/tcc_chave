@@ -1,10 +1,40 @@
 import styles from "@/styles/form.module.css"
-
+import { useState } from "react"
+import api from "@/services/api"
+import { useRouter } from "next/router"
 export default function VeiculoPage() {
+    const router = useRouter()
+    const [veiculo, setVeiculo] = useState({})
+
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+        const {marca, modelo, ano, placa, dataAquisicao, cor,setorId} = e.target
+        var veiculoSalvar = {
+            marca: marca.value,
+            modelo: modelo.value,
+            ano: ano.value,
+            placa: placa.value,
+            data: dataAquisicao.value,
+            cor: cor.value
+            // setorId: setorId.value
+        }
+
+        api
+        .post("/veiculos", veiculoSalvar)
+        .then((res)=>{
+            alert("Veículo cadastrado com sucesso!");
+            router.push("/");
+        })
+        .catch((err)=>{
+            alert("Erro ao cadastrar veículo");
+            alert(err?.response?.data?.message  ?? err.message);
+        })
+    };
+
     return(
         <div className={styles.body}>
             <div  className={styles.formDiv}>
-                <form className ={styles.form}>
+                <form onSubmit={handleSubmit} className ={styles.form}>
                     <h1 className={styles.title}>CADASTRO DE VEÍCULOS</h1>
                     {/* Marca */}
                     <label className={styles.label} htmlFor="marca">Marca</label>
@@ -15,6 +45,9 @@ export default function VeiculoPage() {
                     {/* Ano */}
                     <label className={styles.label} htmlFor="ano">Ano</label>
                     <input className={styles.input} min="1900" max={2100} name="ano" type="number" placeholder="Ano do veículo"/> 
+                    {/* Cor */}
+                    <label className={styles.label} htmlFor="cor">Cor</label>
+                    <input className={styles.input} name="cor" type="text" placeholder="Digite a cor do veículo"/>
                     {/* Placa */}
                     <label className={styles.label} htmlFor="placa">Placa</label>
                     <input className={styles.inputPlaca} name="placa" type="text" placeholder="" /> 

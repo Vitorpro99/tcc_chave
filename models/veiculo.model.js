@@ -3,6 +3,7 @@ module.exports = (sequelize,Sequelize) => {
         marca: {type: Sequelize.STRING},
         modelo: {type: Sequelize.STRING},
         ano: {type: Sequelize.INTEGER},
+        cor: {type: Sequelize.STRING},
         kilometragem: {type: Sequelize.FLOAT},
         // possuidor: {type: Sequelize}
         dataAquisicao: {type: Sequelize.DATEONLY},

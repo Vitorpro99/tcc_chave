@@ -158,7 +158,7 @@ exports.login = (req,res) =>{
                     message: "Senha inválida!"
                 });
             }
-            var token = jwt.sign({id:usuario.id}, secretKey, { expireIn "1h"});
+            var token = jwt.sign({id:usuario.id}, secretKey, { expireIn: "1h"});
         });
         res.status(200).send({ usuario: usuario, accessToken: token})
         .catch((err)=>{
