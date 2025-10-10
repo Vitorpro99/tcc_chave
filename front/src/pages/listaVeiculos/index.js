@@ -22,6 +22,7 @@ export default function ListaVeiculosPage() {
         <>
             <div className={styles.container}>
             <h3>Listagem de veículos</h3>
+                <div className={styles.div_tabela}>
                 <table className={styles.table}>
                     <thead>
                         <tr>
@@ -36,7 +37,7 @@ export default function ListaVeiculosPage() {
                     {veiculos?.length > 0 && veiculos.map((veiculo) => <CardVeiculo veiculo={veiculo} />)}
 
                 </table>
-
+                </div>
             </div>
         </>
     )

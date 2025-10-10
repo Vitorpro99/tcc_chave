@@ -1,0 +1,24 @@
+.editButton{
+    background-color: #C42020;
+    color: white;
+    padding: 0.2rem;
+    border: 1px #C42020 solid;
+    border-radius: 5px;
+    cursor:pointer
+}
+.editButton:hover{
+    background-color: white;
+    color:#C42020;
+}
+.deleteButton{
+    background-color: white;
+    color: #c42020;
+    padding: 0.2rem;
+    border: 1px #C42020 solid;
+    border-radius: 5px;
+    cursor:pointer
+}
+.deleteButton:hover{
+    background-color: #C42020;
+    color: white
+}
