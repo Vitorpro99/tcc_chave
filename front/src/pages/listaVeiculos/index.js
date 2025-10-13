@@ -21,7 +21,7 @@ export default function ListaVeiculosPage() {
     return (
         <>
             <div className={styles.container}>
-            <h3>Listagem de veículos</h3>
+            <h3 className={styles.title}>Listagem de veículos</h3>
                 <div className={styles.div_tabela}>
                 <table className={styles.table}>
                     <thead>
@@ -32,6 +32,8 @@ export default function ListaVeiculosPage() {
                             <th>Ano</th>
                             <th>Placa</th>
                             <th>Cor</th>
+                            <th className={styles.emptyRow}></th>
+                            <th className={styles.emptyRow}></th>
                         </tr>
                     </thead>
                     {veiculos?.length > 0 && veiculos.map((veiculo) => <CardVeiculo veiculo={veiculo} />)}

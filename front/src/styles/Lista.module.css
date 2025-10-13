@@ -10,6 +10,10 @@
 }
 .table th{
     row-gap: 1rem;
+    padding : 1rem;
+    background-color: #C42020;
+    color: white;
+    border-right: 1px solid white;
 }
 .th.fixed{
     top: 0;
@@ -28,4 +32,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.emptyRow{
+    border-right: 1px solid transparent;
+}
+.title{
+     font-size: 2rem;
+    font-weight: 600;
+    color:#8b2c2c;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 }

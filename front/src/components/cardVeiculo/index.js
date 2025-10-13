@@ -14,7 +14,9 @@ export default function cardVeiculo({veiculo}) {
     )
         .catch((err) => alert("Erro ao excluir"))
     }
-
+    const editarVeiculo = (id) =>{
+        router.push(`/editar-veiculo/${id}`)
+    }
     return(
     <tr>
         <td>{veiculo.marca}</td>
@@ -22,8 +24,8 @@ export default function cardVeiculo({veiculo}) {
         <td>{veiculo.ano}</td>
         <td>{veiculo.placa}</td>
         <td>{veiculo.cor}</td>
-        <td><button className={styles.editButton}>Editar</button></td>
-        <td><button className={styles.deleteButton} onClick={() => excluirVeículo(veiculo.id)}>Excluir</button></td>
+        <td><button type="button" className={styles.editButton} onClick={() => editarVeiculo(veiculo.id)}>Editar</button></td>
+        <td><button type="button" className={styles.deleteButton} onClick={() => excluirVeículo(veiculo.id)}>Excluir</button></td>
     </tr>
     )
 
