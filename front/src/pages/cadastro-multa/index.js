@@ -3,28 +3,29 @@ import { useState } from "react";
 import api from "@/services/api";
 import { useRouter } from "next/router";
 
-export default function IpvaPage() {
+export default function MultaPage() {
     const router = useRouter();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { ano, valor, descricao, veiculoId } = e.target;
+        const { data, valor, descricao, veiculoId, usuarioId } = e.target;
 
-        var ipvaSalvar = {
-            ano: parseInt(ano.value),
+        var multaSalvar = {
+            data: data.value,
             valor: parseFloat(valor.value),
             descricao: descricao.value,
             veiculoId: parseInt(veiculoId.value),
+            usuarioId: parseInt(usuarioId.value),
         };
 
         api
-            .post("/ipvas", ipvaSalvar)
+            .post("/multas", multaSalvar)
             .then((res) => {
-                alert("IPVA cadastrado com sucesso!");
+                alert("Multa cadastrada com sucesso!");
                 router.push("/");
             })
             .catch((err) => {
-                alert("Erro ao cadastrar IPVA");
+                alert("Erro ao cadastrar multa");
                 alert(err?.response?.data?.message ?? err.message);
             });
     };
@@ -33,23 +34,27 @@ export default function IpvaPage() {
         <div className={styles.body}>
             <div className={styles.formDiv}>
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    <h1 className={styles.title}>CADASTRO DE IPVA</h1>
+                    <h1 className={styles.title}>CADASTRO DE MULTA</h1>
                     
-                    {/* Ano */}
-                    <label className={styles.label} htmlFor="ano">Ano</label>
-                    <input className={styles.input} name="ano" type="number" min="1900" max={2100} placeholder="Ano de referência do IPVA" required />
-                    
+                    {/* Data */}
+                    <label className={styles.label} htmlFor="data">Data da Infração</label>
+                    <input className={styles.input} name="data" type="date" required />
+
                     {/* Valor */}
                     <label className={styles.label} htmlFor="valor">Valor</label>
-                    <input className={styles.input} name="valor" type="number" step="0.01" placeholder="Digite o valor" required />
-                    
+                    <input className={styles.input} name="valor" type="number" step="0.01" placeholder="Digite o valor da multa" required />
+
                     {/* Descrição */}
                     <label className={styles.label} htmlFor="descricao">Descrição</label>
-                    <input className={styles.input} name="descricao" type="text" placeholder="Ex: IPVA 2024 Quota Única" />
+                    <input className={styles.input} name="descricao" type="text" placeholder="Descrição da infração" required />
                     
                     {/* Veiculo ID */}
                     <label className={styles.label} htmlFor="veiculoId">ID do Veículo</label>
-                    <input className={styles.input} name="veiculoId" placeholder="Digite o ID do veículo associado" type="number" required />
+                    <input className={styles.input} name="veiculoId" placeholder="ID do veículo autuado" type="number" required />
+
+                    {/* Usuário ID */}
+                    <label className={styles.label} htmlFor="usuarioId">ID do Condutor</label>
+                    <input className={styles.input} name="usuarioId" placeholder="ID do condutor responsável" type="number" required />
                     
                     <button className={styles.mainButton} type="submit">Cadastrar</button>
                 </form>

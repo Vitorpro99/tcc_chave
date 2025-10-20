@@ -17,7 +17,7 @@ exports.create = (req,res) =>{
         ano:            req.body.ano,
         cor:            req.body.cor,
         kilometragem:   req.body.kilometragem,
-        // possuidor: {type: Sequelize}
+        // possuidor: {type: Sequelize},
         dataAquisicao:  req.body.data,
         placa:          req.body.placa,
         setorId:        req.body.setorId,

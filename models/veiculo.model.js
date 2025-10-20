@@ -5,7 +5,7 @@ module.exports = (sequelize,Sequelize) => {
         ano: {type: Sequelize.INTEGER},
         cor: {type: Sequelize.STRING},
         kilometragem: {type: Sequelize.FLOAT},
-        // possuidor: {type: Sequelize}
+        // possuidor: {type: Sequelize},
         dataAquisicao: {type: Sequelize.DATEONLY},
         placa: {type: Sequelize.STRING},
         foto: {type: Sequelize.STRING}

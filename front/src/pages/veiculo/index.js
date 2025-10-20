@@ -15,8 +15,8 @@ export default function VeiculoPage() {
             ano: ano.value,
             placa: placa.value,
             data: dataAquisicao.value,
-            cor: cor.value
-            // setorId: setorId.value
+            cor: cor.value,
+            setorId: setorId.value
         }
 
         api

@@ -120,4 +120,4 @@ export default function VeiculoPage() {
 
 Com base no que foi passado trecho dos controllers e rotas
 
-crie para cada um uma pagina de formulário a ser enviadas em códigos separados
+crie para cada um uma pagina de formulário a ser enviadas em códigos separad        os

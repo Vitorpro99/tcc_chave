@@ -44,3 +44,20 @@
     margin-bottom: 1rem;
     margin-top: 1rem;
 }
+.pageButton{
+    color:#C42020;
+    background-color: white;
+    padding: 0.2rem;
+    margin-top: 1rem;
+    border: 1px solid #C42020;
+    border-radius: 5px;
+    margin-left: 0.5rem;
+}
+.pageButton:hover{
+    color:white;
+    background-color: #C42020;
+}
+.pageButton.active{
+    color:white;
+    background-color: #C42020;
+}
