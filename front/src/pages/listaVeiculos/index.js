@@ -1,47 +1,60 @@
-// pages/listaVeiculos.js (ou onde seu arquivo estiver)
+// pages/listaVeiculos.js
 
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import styles from "../../styles/Lista.module.css";
 import CardVeiculo from "@/components/cardVeiculo";
-import ModalVeiculo from "@/components/modalVeiculo"; // <-- 1. Importe o novo componente
+// Corrigindo a nomenclatura do componente para PascalCase, que é a convenção em React
+import ModalVeiculo from "@/components/modalVeiculo"; 
 
 export default function ListaVeiculosPage() {
     const [veiculos, setVeiculos] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(5);
-    
-
-    // --- 2. Estado para controlar o modal ---
-    // Começa como null (modal fechado). Quando um veículo for selecionado,
-    // ele guardará o objeto completo daquele veículo.
+    const [itemsPerPage, setItemsPerPage] = useState(5); // Você pode ajustar este número
     const [selectedVeiculo, setSelectedVeiculo] = useState(null);
 
-    // (O resto do seu código getVeiculos, useEffect, e lógica de paginação continua igual...)
     const getVeiculos = () => {
         api
             .get('veiculos')
             .then((result) => {
-                setVeiculos(result.data)
+                setVeiculos(result.data);
             })
             .catch((err) => {
                 console.log(err);
-            })
+            });
     }
+
+    // O useEffect deve ser chamado apenas uma vez para buscar os dados iniciais
     useEffect(() => {
         getVeiculos();
-    }, [])
-    useEffect(() => { getVeiculos(); }, []);
+    }, []);
+
+    // --- Lógica de Paginação ---
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = veiculos.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(veiculos.length / itemsPerPage);
-    const handleNextPage = () => { /* ... */ };
-    const handlePrevPage = () => { /* ... */ };
-    const handlePageClick = (pageNumber) => { /* ... */ };
 
+    // --- Funções de Paginação Preenchidas ---
+    const handleNextPage = () => {
+        // Apenas avança se não estiver na última página
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
 
-    // --- 3. Funções para controlar o modal ---
+    const handlePrevPage = () => {
+        // Apenas retrocede se não estiver na primeira página
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    // --- Funções para controlar o modal ---
     const handleOpenModal = (veiculo) => {
         setSelectedVeiculo(veiculo);
     };
@@ -53,7 +66,6 @@ export default function ListaVeiculosPage() {
     return (
         <>
             <div className={styles.container}>
-                {/* Seu título e tabela continuam aqui */}
                 <h3 className={styles.title}>Listagem de veículos</h3>
                 <div className={styles.div_tabela}>
                     <table className={styles.table}>
@@ -64,29 +76,50 @@ export default function ListaVeiculosPage() {
                                 <th>Ano</th>
                                 <th>Placa</th>
                                 <th>Cor</th>
-                                <th className={styles.emptyRow}>Ações</th> {/* Mudei para "Ações" */}
+                                <th className={styles.emptyRow}>Ações</th>
                                 <th className={styles.emptyRow}></th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentItems.length > 0 && currentItems.map((veiculo) => (
-                                // --- 4. Passe a função para o CardVeiculo ---
                                 <CardVeiculo
                                     key={veiculo.id || veiculo.placa}
                                     veiculo={veiculo}
-                                    onViewDetails={handleOpenModal} // Passando a função como prop
+                                    onViewDetails={handleOpenModal}
                                 />
                             ))}
                         </tbody>
                     </table>
                 </div>
 
-                {/* Sua paginação continua aqui */}
-                {/* ... */}
+                {/* --- SEÇÃO DE PAGINAÇÃO ADICIONADA --- */}
+                {/* Só mostra a paginação se houver mais itens do que o limite por página */}
+                {veiculos.length > itemsPerPage && (
+                    <div className={styles.pagination}>
+                        <button onClick={handlePrevPage} disabled={currentPage === 1} className={styles.pageButton}>
+                            Anterior
+                        </button>
+                        
+                        {/* Renderiza os botões com os números das páginas */}
+                        {Array.from({ length: totalPages }, (_, index) => (
+                            <button 
+                                key={index + 1} 
+                                onClick={() => handlePageClick(index + 1)}
+                                // Adiciona a classe 'active' para a página atual
+                                className={`${styles.pageButton} ${currentPage === index + 1 ? styles.active : ''}`}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+
+                        <button onClick={handleNextPage} disabled={currentPage === totalPages} className={styles.pageButton}>
+                            Próximo
+                        </button>
+                    </div>
+                )}
             </div>
 
-            {/* --- 5. Renderização condicional do Modal --- */}
-            {/* O modal só será renderizado se 'selectedVeiculo' não for nulo */}
+            {/* --- Renderização condicional do Modal --- */}
             {selectedVeiculo && (
                 <ModalVeiculo
                     veiculo={selectedVeiculo}
