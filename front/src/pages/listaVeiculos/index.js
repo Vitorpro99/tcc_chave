@@ -1,16 +1,13 @@
-// pages/listaVeiculos.js
-
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import styles from "../../styles/Lista.module.css";
 import CardVeiculo from "@/components/cardVeiculo";
-// Corrigindo a nomenclatura do componente para PascalCase, que é a convenção em React
 import ModalVeiculo from "@/components/modalVeiculo"; 
 
 export default function ListaVeiculosPage() {
     const [veiculos, setVeiculos] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(5); // Você pode ajustar este número
+    const [itemsPerPage, setItemsPerPage] = useState(12); // Você pode ajustar este número
     const [selectedVeiculo, setSelectedVeiculo] = useState(null);
 
     const getVeiculos = () => {
@@ -35,16 +32,16 @@ export default function ListaVeiculosPage() {
     const currentItems = veiculos.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(veiculos.length / itemsPerPage);
 
-    // --- Funções de Paginação Preenchidas ---
+    
     const handleNextPage = () => {
-        // Apenas avança se não estiver na última página
+        
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
         }
     };
 
     const handlePrevPage = () => {
-        // Apenas retrocede se não estiver na primeira página
+        
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
@@ -91,21 +88,18 @@ export default function ListaVeiculosPage() {
                         </tbody>
                     </table>
                 </div>
-
-                {/* --- SEÇÃO DE PAGINAÇÃO ADICIONADA --- */}
-                {/* Só mostra a paginação se houver mais itens do que o limite por página */}
                 {veiculos.length > itemsPerPage && (
                     <div className={styles.pagination}>
                         <button onClick={handlePrevPage} disabled={currentPage === 1} className={styles.pageButton}>
                             Anterior
                         </button>
                         
-                        {/* Renderiza os botões com os números das páginas */}
+                        
                         {Array.from({ length: totalPages }, (_, index) => (
                             <button 
                                 key={index + 1} 
                                 onClick={() => handlePageClick(index + 1)}
-                                // Adiciona a classe 'active' para a página atual
+                        
                                 className={`${styles.pageButton} ${currentPage === index + 1 ? styles.active : ''}`}
                             >
                                 {index + 1}

@@ -59,7 +59,41 @@
     background-color: #f9f9f9;
     padding: 10px;
     border-radius: 4px;
-    border-left: 3px solid #007bff; /* Uma pequena barra de cor para destacar */
+    border-left: 3px solid #C42020; /* Uma pequena barra de cor para destacar */
+}
+.foto{
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin: 0;
+    border-radius: 10px;
+    border-left: 3px solid #C42020; /* Uma pequena barra de cor para destacar */
+}
+
+.editButton{
+    background-color: #C42020;
+    color: white;
+    padding: 0.2rem;
+    border: 1px #C42020 solid;
+    border-radius: 5px;
+    cursor:pointer;
+    justify-self: center;
+}
+.editButton:hover{
+    background-color: white;
+    color:#C42020;
+}
+.deleteButton{
+    background-color: white;
+    color: #c42020;
+    padding: 0.2rem;
+    border: 1px #C42020 solid;
+    border-radius: 5px;
+    cursor:pointer;
+    justify-self: center;
+}
+.deleteButton:hover{
+    background-color: #C42020;
+    color: white;
 }
 
 @keyframes fadeIn {

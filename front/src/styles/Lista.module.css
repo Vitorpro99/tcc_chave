@@ -55,6 +55,7 @@
 }
 .pageButton:hover{
     color:white;
+    cursor:pointer;
     background-color: #C42020;
 }
 .pageButton.active{
