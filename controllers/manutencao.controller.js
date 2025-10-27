@@ -1,33 +1,26 @@
 const db = require("../models");
-const Manutencao = db.manutencao; // Certifique-se que este nome corresponde à exportação no seu /models/index.js
+const Manutencao = db.manutencao;
 const Op = db.Sequelize.Op;
 
-// Cria e salva uma nova Manutenção
+
 exports.create = (req, res) => {
-    // Valida a requisição
-    // --- INÍCIO DA ALTERAÇÃO 1 ---
-    // Adicionamos a validação para o veiculoId
     if (!req.body.tipo || req.body.valor === undefined || !req.body.veiculoId) {
         res.status(400).send({
             message: "O tipo, o valor e o ID do veículo são campos obrigatórios!",
         });
         return;
     }
-    // --- FIM DA ALTERAÇÃO 1 ---
 
-    // Cria o objeto Manutencao
     const manutencao = {
         data: req.body.data,
         tipo: req.body.tipo,
         valor: req.body.valor,
         observacoes: req.body.observacoes,
-        // --- INÍCIO DA ALTERAÇÃO 2 ---
-        // Agora, associamos a manutenção ao veículo recebido na requisição
         veiculoId: req.body.veiculoId
-        // --- FIM DA ALTERAÇÃO 2 ---
+
     };
 
-    // Salva no banco de dados
+
     Manutencao.create(manutencao)
         .then((data) => {
             res.send(data);
@@ -39,7 +32,6 @@ exports.create = (req, res) => {
         });
 };
 
-// Busca todas as manutenções, com opção de filtrar por tipo
 exports.findAll = (req, res) => {
     const tipo = req.query.tipo;
     var condition = tipo ? { tipo: { [Op.iLike]: `%${tipo}%` } } : null;
@@ -55,7 +47,7 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Busca uma única manutenção pelo ID
+
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
@@ -101,7 +93,7 @@ exports.update = (req, res) => {
         });
 };
 
-// Deleta uma manutenção pelo ID
+
 exports.delete = (req, res) => {
     const id = req.params.id;
 
