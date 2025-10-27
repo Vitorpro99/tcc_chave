@@ -3,5 +3,7 @@ module.exports={
     USER:"postgres",
     PASSWORD: "postgres",
     DB:"tcc",
-    dialect:"postgres"
+    dialect:"postgres",
+    logging: console.log
 }
+

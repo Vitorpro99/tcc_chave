@@ -5,12 +5,15 @@ const Op = db.Sequelize.Op;
 // Cria e salva uma nova Manutenção
 exports.create = (req, res) => {
     // Valida a requisição
-    if (!req.body.tipo || req.body.valor === undefined) {
+    // --- INÍCIO DA ALTERAÇÃO 1 ---
+    // Adicionamos a validação para o veiculoId
+    if (!req.body.tipo || req.body.valor === undefined || !req.body.veiculoId) {
         res.status(400).send({
-            message: "O tipo e o valor da manutenção não podem estar vazios!",
+            message: "O tipo, o valor e o ID do veículo são campos obrigatórios!",
         });
         return;
     }
+    // --- FIM DA ALTERAÇÃO 1 ---
 
     // Cria o objeto Manutencao
     const manutencao = {
@@ -18,8 +21,10 @@ exports.create = (req, res) => {
         tipo: req.body.tipo,
         valor: req.body.valor,
         observacoes: req.body.observacoes,
-        // Normalmente você associaria a um veículo aqui, recebendo o ID dele. Ex:
-        // veiculoId: req.body.veiculoId 
+        // --- INÍCIO DA ALTERAÇÃO 2 ---
+        // Agora, associamos a manutenção ao veículo recebido na requisição
+        veiculoId: req.body.veiculoId
+        // --- FIM DA ALTERAÇÃO 2 ---
     };
 
     // Salva no banco de dados

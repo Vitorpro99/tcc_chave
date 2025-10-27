@@ -48,10 +48,10 @@ export default function VeiculoPage() {
         e.preventDefault(); // Impede o recarregamento da página
 
         api
-            .put(`/veiculos/${id}`, veiculo) // Usamos o método PUT para atualizar
+            .put(`/veiculos/${id}`, veiculo) 
             .then((res) => {
                 alert("Veículo editado com sucesso!");
-                router.push("/listaVeiculos"); // Redireciona para a lista
+                router.push("/listaVeiculos"); 
             })
             .catch((err) => {
                 alert("Erro ao editar o veículo");
@@ -65,7 +65,7 @@ export default function VeiculoPage() {
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <h1 className={styles.title}>EDITAR VEÍCULO</h1>
                     
-                    {/* 2. CORREÇÃO NOS INPUTS: Usar value e onChange */}
+                  
                     <label className={styles.label} htmlFor="marca">Marca</label>
                     <input className={styles.input} value={veiculo.marca || ''} onChange={handleChange} name="marca" type="text" placeholder="Digite a marca do veículo" />
                     

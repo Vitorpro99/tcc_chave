@@ -2,13 +2,15 @@ import api from "@/services/api";
 import { useEffect, useState } from "react";
 import styles from "../../styles/Lista.module.css";
 import CardVeiculo from "@/components/cardVeiculo";
-import ModalVeiculo from "@/components/modalVeiculo"; 
+import ModalVeiculo from "@/components/modalVeiculo";
 
 export default function ListaVeiculosPage() {
     const [veiculos, setVeiculos] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(12); // Você pode ajustar este número
     const [selectedVeiculo, setSelectedVeiculo] = useState(null);
+    const [isLoadingModal, setIsLoadingModal] = useState(false); // Bónus: estado de carregamento
+
 
     const getVeiculos = () => {
         api
@@ -32,16 +34,16 @@ export default function ListaVeiculosPage() {
     const currentItems = veiculos.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(veiculos.length / itemsPerPage);
 
-    
+
     const handleNextPage = () => {
-        
+
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
         }
     };
 
     const handlePrevPage = () => {
-        
+
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
@@ -52,8 +54,26 @@ export default function ListaVeiculosPage() {
     };
 
     // --- Funções para controlar o modal ---
-    const handleOpenModal = (veiculo) => {
-        setSelectedVeiculo(veiculo);
+    const handleOpenModal = async (veiculoResumido) => {
+        setIsLoadingModal(true); // Ativa o indicador de carregamento
+        setSelectedVeiculo(veiculoResumido); // Mostra o modal imediatamente com dados básicos
+
+        try {
+
+            const response = await api.get(`/veiculos/${veiculoResumido.id}`);
+
+
+            const veiculoCompleto = response.data;
+
+
+            setSelectedVeiculo(veiculoCompleto);
+
+        } catch (err) {
+            console.error("Erro ao buscar detalhes do veículo:", err);
+            alert("Não foi possível carregar os detalhes completos do veículo.");
+        } finally {
+            setIsLoadingModal(false);
+        }
     };
 
     const handleCloseModal = () => {
@@ -73,15 +93,22 @@ export default function ListaVeiculosPage() {
                                 <th>Ano</th>
                                 <th>Placa</th>
                                 <th>Cor</th>
+                                <th className={styles.emptyRow}>Setor</th>
                                 <th className={styles.emptyRow}>Ações</th>
-                                <th className={styles.emptyRow}></th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentItems.length > 0 && currentItems.map((veiculo) => (
                                 <CardVeiculo
+                                    // A key é essencial para o React em listas
                                     key={veiculo.id || veiculo.placa}
+
+                                    // ANTES ESTAVA: veiculo={selectedVeiculo}
+                                    // CORRETO: Passa o 'veiculo' específico deste item do loop
                                     veiculo={veiculo}
+
+                                    // ANTES FALTAVA ESTA LINHA:
+                                    // CORRETO: Passa a função que abre o modal para o componente filho
                                     onViewDetails={handleOpenModal}
                                 />
                             ))}
@@ -93,13 +120,13 @@ export default function ListaVeiculosPage() {
                         <button onClick={handlePrevPage} disabled={currentPage === 1} className={styles.pageButton}>
                             Anterior
                         </button>
-                        
-                        
+
+
                         {Array.from({ length: totalPages }, (_, index) => (
-                            <button 
-                                key={index + 1} 
+                            <button
+                                key={index + 1}
                                 onClick={() => handlePageClick(index + 1)}
-                        
+
                                 className={`${styles.pageButton} ${currentPage === index + 1 ? styles.active : ''}`}
                             >
                                 {index + 1}

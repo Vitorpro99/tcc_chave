@@ -1,7 +1,7 @@
 const db = require("../models");
 
 const Veiculo = db.veiculo;
-
+const Setor = db.setor;
 const Op = db.Sequelize.Op;
 
 exports.create = (req,res) =>{
@@ -37,10 +37,13 @@ exports.create = (req,res) =>{
 
 exports.findAll = (req,res) =>{
     const marca  = req.query.marca
-
+    
     var condition = marca ? { marca: { [Op.iLike]: `%${marca}%` } } : null;
 
-    Veiculo.findAll({where: condition})
+    Veiculo.findAll({where: condition, include: [db.setor]})
+
+    
+
         .then((data)=>{
             res.send(data);
         })
@@ -51,25 +54,33 @@ exports.findAll = (req,res) =>{
         })
 };
 
-exports.findOne = (req,res) =>{
+exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Veiculo.findByPk(id)
-    .then((data)=>{
-        if(data){
-            res.send(data);
-        }
-        else{
-            res.status(404).send({
-                message: `Não é possivel achar o Veiculo com o id=` + id    ,
-            });
-        }
+    Veiculo.findByPk(id, {
+        include: [
+            db.setor, 
+            {
+                model: db.manutencao,
+                as: 'manutencoes' // <-- AQUI ESTÁ A CHAVE!
+            }
+  
+        ]
     })
-    .catch((err)=>{
-        res.status(500).send({
-            message: "Erro na busca por Veiculo pelo id" + id
+        .then((data) => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Não foi possível encontrar o Veículo com o id=${id}.`,
+                });
+            }
         })
-    })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Erro na busca pelo Veículo com id=" + id,
+            });
+        });
 };
 
 exports.update = (req,res) =>{

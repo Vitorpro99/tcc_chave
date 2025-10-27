@@ -52,7 +52,7 @@ db.veiculo.hasOne(db.ipva, {
 
 // Adicione um alias aqui para resolver a colisão.
 db.ipva.belongsTo(db.veiculo, {
-    as: 'veiculoAssociado', // Mudei para 'veiculoAssociado' para evitar o conflito
+    as: 'veiculoAssociado', 
     foreignKey: 'veiculoId'
 });
 
