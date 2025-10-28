@@ -44,15 +44,13 @@ const formatarValor = (valor) => {
     }
 
     return (
-        // O fundo escuro que cobre a tela
         <div className={styles.modalOverlay} onClick={onClose}>
-            {/* A caixa de conteúdo do modal */}
-            {/* Usamos e.stopPropagation() para evitar que o clique dentro do modal feche-o */}
+          
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 
-                {/* Botão para fechar no canto superior direito */}
+                
                 <button className={styles.closeButton} onClick={onClose}>
-                    &times; {/* Isso é um 'X' */}
+                    &times; 
                 </button>
 
                 <h2>Detalhes do Veículo</h2>
@@ -71,14 +69,21 @@ const formatarValor = (valor) => {
                     <p><strong>Cor:</strong> {veiculo.cor}</p>
                     <p><strong>Data:</strong> {veiculo.dataAquisicao || 'Não informado'}</p>
                     <p></p>
-                    <p><strong>Setor:</strong> {veiculo.setorId || 'Não informada'}</p>
+                    <p><strong>Setor:</strong> {veiculo.setor ? veiculo.setor.nome : 'Não informada'}</p>
 
                    <div className={styles.actionsContainer}>
 
 
-                    <div className={styles.manutencoesSection}>
+                          
+
+                
+                </div>
+                    
+                </div>
+
+                <div className={styles.manutencoesSection}>
+                    
                     <h3>Histórico de Manutenções</h3>
-                    {/* Verificamos se o array 'manutencoes' existe e não está vazio */}
                     {veiculo.manutencoes && veiculo.manutencoes.length > 0 ? (
                         <ul className={styles.manutencoesList}>
                             {/* Usamos .map() para criar um item de lista para cada manutenção */}
@@ -92,24 +97,17 @@ const formatarValor = (valor) => {
                             ))}
                         </ul>
                     ) : (
-                        // Mensagem exibida se não houver manutenções
+                        
                         <p className={styles.noRecords}>Nenhum registro de manutenção encontrado.</p>
                     )}
-                </div>      
-
-
-                    <button type="button" className={styles.editButton} onClick={() => editarVeiculo(veiculo.id)}>Editar Veículo</button>
-                    
-                    {/* 2. Adiciona o Link para a página de cadastro de manutenção */}
-                    <Link href={`/cadastrar_manutencao/${veiculo.id}`}>
+                </div>
+                <div className={styles.buttonsContainer}>
+                    <Link className={styles.repairButton} href={`/cadastrar_manutencao/${veiculo.id}`}>
                         Adicionar Manutenção
                     </Link>
-
+                    <button type="button" className={styles.editButton} onClick={() => editarVeiculo(veiculo.id)}>Editar Veículo</button>
                     <button type="button" className={styles.deleteButton} onClick={() => excluirVeículo(veiculo.id)}>Excluir Veículo</button>
                 </div>
-                    
-                </div>
-                
             </div>
         </div>
     );
