@@ -23,7 +23,7 @@ const formatarValor = (valor) => {
 };
 
 
-    if (!veiculo) return null; // Não renderiza nada se não houver veículo
+    if (!veiculo) return null;
 
     const excluirVeículo = (id) =>{
         if(confirm("Você deseja deletar o veículo?")){
@@ -41,6 +41,18 @@ const formatarValor = (valor) => {
     }
     const editarVeiculo = (id) =>{
         router.push(`/editar-veiculo/${id}`)
+    }
+    const excluirManutencao = (id) =>{
+        if(confirm("Você deseja deletar este item?")){
+            api
+                .delete(`manutencoes/${id}`)
+                .then((res)=>{
+                    alert("Item deletado com sucesso");
+                    router.reload();
+                }
+            )
+            .catch((err) => alert("Erro ao excluir"))
+        }
     }
 
     return (
@@ -72,11 +84,6 @@ const formatarValor = (valor) => {
                     <p><strong>Setor:</strong> {veiculo.setor ? veiculo.setor.nome : 'Não informada'}</p>
 
                    <div className={styles.actionsContainer}>
-
-
-                          
-
-                
                 </div>
                     
                 </div>
@@ -86,13 +93,15 @@ const formatarValor = (valor) => {
                     <h3>Histórico de Manutenções</h3>
                     {veiculo.manutencoes && veiculo.manutencoes.length > 0 ? (
                         <ul className={styles.manutencoesList}>
-                            {/* Usamos .map() para criar um item de lista para cada manutenção */}
                             {veiculo.manutencoes.map((manutencao) => (
                                 <li key={manutencao.id} className={styles.manutencaoItem}>
                                     <p><strong>Data:</strong> {formatarData(manutencao.data)}</p>
                                     <p><strong>Tipo:</strong> {manutencao.tipo}</p>
                                     <p><strong>Valor:</strong> {formatarValor(manutencao.valor)}</p>
                                     {manutencao.observacoes && <p><strong>Obs:</strong> {manutencao.observacoes}</p>}
+                                    <button type="button" className={styles.editButton} onClick={() => excluirManutencao(manutencao.id)}>Excluir manutenção
+
+                                    </button>
                                 </li>
                             ))}
                         </ul>

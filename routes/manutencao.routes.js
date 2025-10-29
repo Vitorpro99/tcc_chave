@@ -15,5 +15,5 @@ module.exports = (app) =>{
 
     router.delete("/",manutencao.deleteAll);
 
-    app.use("/manuntencoes",router);
+    app.use("/manutencoes",router);
 };

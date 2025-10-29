@@ -62,7 +62,7 @@ exports.findOne = (req, res) => {
             db.setor, 
             {
                 model: db.manutencao,
-                as: 'manutencoes' // <-- AQUI ESTÁ A CHAVE!
+                as: 'manutencoes'
             }
   
         ]
