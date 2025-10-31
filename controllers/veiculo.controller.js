@@ -59,12 +59,17 @@ exports.findOne = (req, res) => {
 
     Veiculo.findByPk(id, {
         include: [
-            db.setor, 
+            db.setor,
             {
                 model: db.manutencao,
                 as: 'manutencoes'
+            },
+            
+            {
+                model: db.multa,
+                as: 'multas'
             }
-  
+            
         ]
     })
         .then((data) => {

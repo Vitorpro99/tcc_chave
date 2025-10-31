@@ -18,7 +18,8 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     position: relative;
     width: 90%;
-    max-width: 600px; 
+    /* MODIFICAÇÃO: Aumentado para acomodar as duas colunas */
+    max-width: 900px; 
     animation: fadeIn 0.3s ease-out;
     justify-content: center;
 }
@@ -48,9 +49,8 @@
 
 .detailsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 1fr 1fr; /* Força duas colunas para detalhes principais */
     gap: 15px;
-    margin-top: 20px;
 }
 
 .detailsGrid p {
@@ -60,13 +60,136 @@
     border-radius: 4px;
     border-left: 3px solid #C42020; 
 }
-.foto{
-    padding: 10px;
-    background-color: #f9f9f9;
-    margin: 0;
-    border-radius: 10px;
-    border-left: 3px solid #C42020; 
+
+/* --- INÍCIO DAS NOVAS CLASSES PARA O LAYOUT DE COLUNAS --- */
+
+.modalBodyColumns {
+  display: flex;
+  gap: 2rem; /* Espaçamento entre as colunas */
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
+
+.mainColumn {
+  flex: 2; /* Coluna principal ocupa 2/3 do espaço */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sideColumn {
+  flex: 1; /* Coluna lateral ocupa 1/3 do espaço */
+  border-left: 1px solid #eee;
+  padding-left: 2rem;
+}
+
+/* --- FIM DAS NOVAS CLASSES DE LAYOUT --- */
+
+
+.manutencoesSection {
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 3px solid #C42020;
+}
+
+.manutencoesSection h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.manutencoesList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+    max-height: 300px; /* Adiciona scroll se a lista for muito grande */
+    overflow-y: auto;
+}
+
+.manutencaoItem {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+.manutencaoItem p {
+    margin: 0.5rem 0;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+/* --- INÍCIO DAS NOVAS CLASSES PARA A LISTA LATERAL (MULTAS) --- */
+
+.lateralSection h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #C42020;
+  padding-bottom: 0.5rem;
+}
+
+.lateralList {
+  list-style: none;
+  padding: 0;
+  max-height: 450px; /* Altura máxima com scroll */
+  overflow-y: auto;
+}
+
+.lateralItem {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #eaeaea;
+}
+
+.lateralItem p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+/* --- FIM DAS NOVAS CLASSES DA LISTA LATERAL --- */
+
+
+.buttonsContainer{
+    display: flex;
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas menores */
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+/* NOVO: Estilo genérico para os links que parecem botões */
+.actionButton {
+    background-color: #C42020;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: 1px #C42020 solid;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 120px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+.actionButton:hover {
+    background-color: white;
+    color:#C42020;
+    transition: all 0.3s ease;
+}
+
 
 .editButton{
     background-color: #C42020;
@@ -84,6 +207,7 @@
     color:#C42020;
     transition: all 0.3s ease;
 }
+
 .deleteButton{
     background-color: white;
     color: #c42020;
@@ -100,75 +224,26 @@
     color: white;
     transition: all 0.3s ease;
 }
-.repairButton{
-    background-color: #C42020;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: 1px #ffffff solid;
-    border-radius: 5px;
-    cursor: pointer;
-    min-width: 120px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-.repairButton:hover{
-    background-color: white;
-    color:#28a745;
-    border-color: #28a745;
-    transition: all 0.3s ease;
-}
-.buttonsContainer{
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 2rem;
-    padding: 1rem 0;
+
+/* NOVO: Estilo para os botões de excluir menores dentro das listas */
+.deleteButtonSmall {
+  background-color: transparent;
+  color: #c42020;
+  border: 1px solid #c42020;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+  float: right; /* Alinha o botão à direita */
 }
 
-.manutencoesSection {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    border-left: 3px solid #C42020;
+.deleteButtonSmall:hover {
+  background-color: #c42020;
+  color: white;
 }
 
-.manutencoesSection h3 {
-    color: #333;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #ddd;
-}
-
-.manutencoesList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 1rem;
-}
-
-.manutencaoItem {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
-}
-
-.manutencaoItem p {
-    margin: 0.5rem 0;
-    color: #444;
-    font-size: 0.95rem;
-}
-
-.manutencaoItem strong {
-    color: #333;
-    margin-right: 0.5rem;
-}
 
 .noRecords {
     text-align: center;
@@ -181,22 +256,6 @@
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-@keyframes fadeOut {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }

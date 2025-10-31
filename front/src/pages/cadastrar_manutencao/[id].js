@@ -46,7 +46,7 @@ export default function ManutencaoPageAdaptada() {
         };
 
         api
-            .post("/manuntencoes", manutencaoSalvar)
+            .post("/manutencoes", manutencaoSalvar)
             .then((res) => {
                 alert("Manutenção cadastrada com sucesso!");
                 router.push("/listaVeiculos"); // Redireciona para a lista de veículos
@@ -63,7 +63,6 @@ export default function ManutencaoPageAdaptada() {
                 <form onSubmit={handleSubmit} className={styles.form}>
                     {/* 5. TÍTULO DINÂMICO */}
                     <h1 className={styles.title}>
-                        {/* Exibe para qual veículo estamos adicionando a manutenção */}
                         CADASTRO DE MANUTENÇÃO PARA: <br/>
                         {veiculoInfo ? `${veiculoInfo.marca} ${veiculoInfo.modelo} - ${veiculoInfo.placa}` : "Carregando..."}
                     </h1>

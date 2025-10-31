@@ -25,7 +25,7 @@ export default function LandingPage() {
             <p className={styles.description}>
               Simplifique a gestão de veículos, manutenções e documentação com a nossa plataforma intuitiva.
             </p>
-            <Link href="/lista-veiculos" legacyBehavior>
+            <Link href="/listaVeiculos" legacyBehavior>
               <a className={styles.ctaButton}>Acessar o Painel</a>
             </Link>
           </section>
