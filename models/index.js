@@ -45,8 +45,11 @@ db.veiculo.belongsTo(db.setor, {
 });
 
 // Relação 1:1 entre Veículo e IPVA
-db.veiculo.hasOne(db.ipva, {
-    as: 'ipvaVeiculo',
+db.veiculo.hasMany(db.ipva, {
+    as: 'ipvaVeiculo', 
+    foreignKey: 'veiculoId'
+});
+db.ipva.belongsTo(db.veiculo, {
     foreignKey: 'veiculoId'
 });
 

@@ -18,7 +18,6 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     position: relative;
     width: 90%;
-    /* MODIFICAÇÃO: Aumentado para acomodar as duas colunas */
     max-width: 900px; 
     animation: fadeIn 0.3s ease-out;
     justify-content: center;
@@ -61,31 +60,30 @@
     border-left: 3px solid #C42020; 
 }
 
-/* --- INÍCIO DAS NOVAS CLASSES PARA O LAYOUT DE COLUNAS --- */
-
 .modalBodyColumns {
   display: flex;
-  gap: 2rem; /* Espaçamento entre as colunas */
+  gap: 2rem; 
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
 .mainColumn {
-  flex: 2; /* Coluna principal ocupa 2/3 do espaço */
+  flex: 2; 
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 .sideColumn {
-  flex: 1; /* Coluna lateral ocupa 1/3 do espaço */
+  flex: 1; 
   border-left: 1px solid #eee;
   padding-left: 2rem;
+  min-width: 0;
+  max-height: 500px; 
+  overflow-y: auto;
+  padding-right: 5px;
 }
-
-/* --- FIM DAS NOVAS CLASSES DE LAYOUT --- */
-
-
 .manutencoesSection {
     padding: 1.5rem;
     background-color: #f9f9f9;

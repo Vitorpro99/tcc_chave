@@ -64,12 +64,14 @@ exports.findOne = (req, res) => {
                 model: db.manutencao,
                 as: 'manutencoes'
             },
-            
             {
                 model: db.multa,
                 as: 'multas'
+            },
+            {
+                model: db.ipva,
+                as: 'ipvaVeiculo'
             }
-            
         ]
     })
         .then((data) => {

@@ -3,7 +3,8 @@ import api from '@/services/api';
 import router from 'next/router';
 import styles from './Modal.module.css';
 import Link from 'next/link';
-import listaMultas from '../listaMultas';
+import ListaMultas from '../ListaMultas';
+import ListaIpva from '../listaIpva';
 
 export default function ModalVeiculo({ veiculo, onClose }) {
 
@@ -49,8 +50,6 @@ export default function ModalVeiculo({ veiculo, onClose }) {
                 .catch((err) => alert("Erro ao excluir"));
         }
     };
-
-    // ADIÇÃO: Função para excluir multas
     const excluirMulta = (id) => {
         if (confirm("Você deseja deletar esta multa?")) {
             api.delete(`/multas/${id}`)
@@ -61,14 +60,22 @@ export default function ModalVeiculo({ veiculo, onClose }) {
                 .catch((err) => alert("Erro ao excluir a multa"));
         }
     };
+    const excluirIpva = (id) => {
+        if (confirm("Você deseja deletar este registro de IPVA?")) {
+            api.delete(`/ipvas/${id}`)
+                .then((res) => {
+                    alert("IPVA deletado com sucesso");
+                    router.reload();
+                })
+                .catch((err) => alert("Erro ao excluir o IPVA"));
+        }
+    };
 
     return (
         <div className={styles.modalOverlay} onClick={onClose}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 <button className={styles.closeButton} onClick={onClose}>&times;</button>
                 <h2>Detalhes do Veículo</h2>
-
-                {/* ADIÇÃO: Container principal para o layout de colunas */}
                 <div className={styles.modalBodyColumns}>
 
                     {/* Coluna Principal (Esquerda) */}
@@ -91,7 +98,7 @@ export default function ModalVeiculo({ veiculo, onClose }) {
                                             <p><strong>Tipo:</strong> {manutencao.tipo}</p>
                                             <p><strong>Valor:</strong> {formatarValor(manutencao.valor)}</p>
                                             {manutencao.observacoes && <p><strong>Obs:</strong> {manutencao.observacoes}</p>}
-                                            {/* ALTERAÇÃO: Usando um estilo de botão menor e mais consistente */}
+                                           
                                             <button type="button" className={styles.deleteButtonSmall} onClick={() => excluirManutencao(manutencao.id)}>Excluir</button>
                                         </li>
                                     ))}
@@ -104,21 +111,24 @@ export default function ModalVeiculo({ veiculo, onClose }) {
 
                     {/* Coluna Lateral (Direita) */}
                     <div className={styles.sideColumn}>
-                        {/* ADIÇÃO: O novo componente é usado aqui */}
-                        <listaMultas 
+                        <ListaMultas     
                             multas={veiculo.multas}
                             formatarData={formatarData}
                             formatarValor={formatarValor}
                             onExcluir={excluirMulta}
                         />
+
+                        <ListaIpva 
+                            ipvaList={veiculo.ipvaVeiculo}
+                            formatarValor={formatarValor}
+                            onExcluir={excluirIpva}
+                        />
                     </div>
                 </div>
-
-                {/* ALTERAÇÃO: Botões de Ação reorganizados no rodapé do modal */}
                 <div className={styles.buttonsContainer}>
-                    <Link href={`/cadastrar_manutencao/${veiculo.id}`}>Adicionar Manutenção</Link>
-                    <Link href={`/cadastro-multa/${veiculo.id}`}>Adicionar Multa</Link>
-                    <Link href={`/cadastro-ipva/${veiculo.id}`}>Adicionar IPVA </Link>
+                    <Link className={styles.editButton} href={`/cadastrar_manutencao/${veiculo.id}`}>Adicionar Manutenção</Link>
+                    <Link className={styles.editButton} href={`/cadastro-multa/${veiculo.id}`}>Adicionar Multa</Link>
+                    <Link className={styles.editButton} href={`/cadastro-ipva/${veiculo.id}`}>Adicionar IPVA </Link>
                     <button type="button" className={styles.editButton} onClick={() => editarVeiculo(veiculo.id)}>Editar Veículo</button>
                     <button type="button" className={styles.deleteButton} onClick={() => excluirVeículo(veiculo.id)}>Excluir Veículo</button>
                 </div>
