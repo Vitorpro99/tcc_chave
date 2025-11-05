@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 export default function VeiculoPage() {
     const router = useRouter();
     
-    // Estados para cada campo do formulário (Componente Controlado)
+    
     const [marca, setMarca] = useState("");
     const [modelo, setModelo] = useState("");
     const [ano, setAno] = useState("");
@@ -15,7 +15,7 @@ export default function VeiculoPage() {
     const [cor, setCor] = useState("");
     const [setorId, setSetorId] = useState(""); // Estado para o <select>
 
-    // Estado para a lista de setores (Nome corrigido para plural)
+    
     const [setores, setSetores] = useState([]);
 
     useEffect(() => {
@@ -46,7 +46,7 @@ export default function VeiculoPage() {
         try {
             await api.post("/veiculos", veiculoSalvar);
             alert("Veículo cadastrado com sucesso!");
-            router.push("/listaVeiculos"); // Redireciona para a lista
+            router.push("/listaVeiculos");
         } catch (err) {
             alert("Erro ao cadastrar veículo");
             alert(err?.response?.data?.message ?? err.message);
@@ -101,4 +101,4 @@ export default function VeiculoPage() {
             </div>
         </div>
     )
-}
+}       

@@ -146,22 +146,28 @@ exports.login = (req,res) =>{
             email: req.body.email,
         },
     })
-        .then((usuario)=>{
-            if(!usuario){
-                return res.status(404).send({message: "Usuário não encontrado com esse email!"});
-            }
+    .then((usuario)=>{
+        if(!usuario){
+            return res.status(404).send({message: "Usuário não encontrado com esse email!"});
+        }
 
-            var passwordIsValid = bycrypt.compareSync(req.body.senha, usuario.senha);
-            if(!passwordIsValid){
-                return res.status(401).send({
-                    accessToken: null,
-                    message: "Senha inválida!"
-                });
-            }
-            var token = jwt.sign({id:usuario.id}, secretKey, { expireIn: "1h"});
+        var passwordIsValid = bycrypt.compareSync(req.body.senha, usuario.senha);
+        if(!passwordIsValid){
+            return res.status(401).send({
+                accessToken: null,
+                message: "Senha inválida!"
+            });
+        }
+        var token = jwt.sign({id:usuario.id}, secretKey, { expiresIn: 86400 });
+        res.status(200).send({
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            gestor: usuario.gestor,
+            accessToken: token
         });
-        res.status(200).send({ usuario: usuario, accessToken: token})
-        .catch((err)=>{
-            res.status(500).send({message: "Erro ao logar com o email" + req.body.email});
-        });
-    }
+    })
+    .catch((err)=>{
+        res.status(500).send({message: "Erro ao tentar fazer login: " + err.message});
+    });
+}
