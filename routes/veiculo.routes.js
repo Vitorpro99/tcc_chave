@@ -1,6 +1,8 @@
 module.exports = (app) =>{
     const veiculo = require("../controllers/veiculo.controller.js");
 
+    const { verifyToken } = require("../middleware/authJwt.js");
+
     var router = require("express").Router();
     const multer = require("multer");
          const fs = require("fs");
@@ -36,9 +38,9 @@ module.exports = (app) =>{
     
     
 
-    router.post("/",veiculo.create);
+    router.post("/", [verifyToken],veiculo.create);
     
-    router.get("/",veiculo.findAll);
+    router.get("/",[verifyToken],veiculo.findAll);
     
     router.get("/:id",veiculo.findOne);
     

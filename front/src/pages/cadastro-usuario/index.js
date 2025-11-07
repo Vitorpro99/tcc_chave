@@ -1,22 +1,24 @@
 import styles from "@/styles/form.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "@/services/api";
 import { useRouter } from "next/router";
 
 export default function UsuarioPage() {
     const router = useRouter();
 
+    const [setorId, setSetorId] = useState("");
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { nome, senha, email, numero_reg, setor, gestor } = e.target;
+        const { nome, senha, email, numero_reg, setorId, gestor } = e.target;
 
         var usuarioSalvar = {
             nome: nome.value,
             senha: senha.value,
             email: email.value,
             numero_reg: numero_reg.value,
-            setor: setor.value,
-            gestor: gestor.checked, // Captura o valor booleano do checkbox
+            setorId: parseInt(setorId),
+            gestor: gestor.checked,
         };
 
         api
@@ -30,6 +32,19 @@ export default function UsuarioPage() {
                 alert(err?.response?.data?.message ?? err.message);
             });
     };
+
+        const [setores, setSetores] = useState([]);
+    
+        useEffect(() => {
+            api.get("/setores") 
+                .then((res) => {
+                    setSetores(res.data);
+                })
+                .catch((err) => {
+                    console.error("Erro ao buscar setores:", err);
+                    alert("Não foi possível carregar a lista de setores.");
+                });
+        }, []); 
 
     return (
         <div className={styles.body}>
@@ -54,9 +69,21 @@ export default function UsuarioPage() {
                     <input className={styles.input} name="numero_reg" type="text" placeholder="Matrícula ou CNH" />
 
                     {/* Setor */}
-                    <label className={styles.label} htmlFor="setor">Setor</label>
-                    <input className={styles.input} name="setor" type="text" placeholder="Setor do usuário" required />
-                    
+                     <select
+                        className={styles.input}
+                        name="setorId"
+                        id="setorId"
+                        required
+                        value={setorId}
+                        onChange={(e) => setSetorId(e.target.value)} 
+                    > 
+                        <option value="" disabled>Selecione um setor...</option>
+                        {setores.map((setor) => (
+                            <option key={setor.id} value={setor.id}>
+                                {setor.nome}
+                            </option>
+                        ))}
+                    </select>
                     {/* Gestor */}
                     <div className={styles.checkboxContainer}>
                         <input className={styles.checkbox} id="gestor" name="gestor" type="checkbox" />

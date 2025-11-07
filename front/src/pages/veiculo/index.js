@@ -13,7 +13,7 @@ export default function VeiculoPage() {
     const [placa, setPlaca] = useState("");
     const [dataAquisicao, setDataAquisicao] = useState("");
     const [cor, setCor] = useState("");
-    const [setorId, setSetorId] = useState(""); // Estado para o <select>
+    const [setorId, setSetorId] = useState("");
 
     
     const [setores, setSetores] = useState([]);

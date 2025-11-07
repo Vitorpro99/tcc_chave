@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "../../styles/Lista.module.css";
 import CardVeiculo from "@/components/cardVeiculo";
 import ModalVeiculo from "@/components/modalVeiculo";
+import { useRouter } from "next/router";
 
 export default function ListaVeiculosPage() {
     const [veiculos, setVeiculos] = useState([]);
@@ -10,7 +11,7 @@ export default function ListaVeiculosPage() {
     const [itemsPerPage, setItemsPerPage] = useState(12); 
     const [selectedVeiculo, setSelectedVeiculo] = useState(null);
     const [isLoadingModal, setIsLoadingModal] = useState(false); 
-
+    const router = useRouter();
 
     const getVeiculos = () => {
         api
@@ -19,13 +20,26 @@ export default function ListaVeiculosPage() {
                 setVeiculos(result.data);
             })
             .catch((err) => {
-                console.log(err);
+                console.error("Erro ao buscar veículos:", err);
+                if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                    alert("A sua sessão expirou. Por favor, faça login novamente.");
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    router.push('/login');
+                }
             });
     }
 
   
     useEffect(() => {
-        getVeiculos();
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert("Você precisa estar logado para aceder a esta página.");
+            router.push('/login');
+        } else {
+            getVeiculos();
+        }
     }, []);
 
     const indexOfLastItem = currentPage * itemsPerPage;

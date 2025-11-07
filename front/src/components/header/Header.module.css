@@ -1,5 +1,6 @@
+/* ATUALIZADO: .app_header agora usa flex para separar os menus do login */
 .app_header {
-  justify-content: space-between;
+  justify-content: space-between; /* Itens nas extremidades */
   display: flex;
   align-items: center;
   background-color: #C42020;
@@ -26,6 +27,8 @@
 .header_nav > ul > li {
   /* Estilos para o <li>, se necessário */
 }
+
+/* ... (Todo o seu CSS de .dropdown, .dropdown_toggle, .dropdown_menu está perfeito) ... */
 
 .dropdown {
   position: relative;
@@ -61,11 +64,11 @@
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   list-style-type: none;
-  padding: 10px 0; /* Este padding já cria o espaçamento interno */
-  /* margin-top: 10px; <-- LINHA REMOVIDA (ESTA ERA A CAUSA DO PROBLEMA) */
+  padding: 10px 0;
+  /* margin-top: 10px; <-- Removido */
   min-width: 150px;
   z-index: 10;
-  display: flex;
+  display: flex; 
   flex-direction: column;
   gap: 5px;
 }
@@ -91,3 +94,29 @@
 .dropdown_link:hover {
   background-color: #f0f0f0;
 }
+
+/* --- INÍCIO DAS NOVAS CLASSES --- */
+
+
+.user_actions {
+  display: flex;
+  align-items: center;
+}
+
+
+.loginButton {
+  background-color: #ffffff;
+  color: #C42020;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.loginButton:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+

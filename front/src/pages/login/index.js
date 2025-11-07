@@ -30,16 +30,16 @@ export default function LoginPage() {
                 localStorage.setItem("token", response.data.accessToken);
                 localStorage.setItem("user", JSON.stringify(response.data));
 
-                // Redireciona para a página principal
-                router.push("/lista-veiculos"); // Ou para a sua página de dashboard
+            
+                router.push("/listaVeiculos"); // Ou para a sua página de dashboard
             }
         } catch (err) {
-            // Trata erros vindos da API (ex: "Senha inválida!")
+            
             const errorMessage = err.response?.data?.message || "Erro ao tentar fazer login. Tente novamente.";
             setError(errorMessage);
             alert(errorMessage);
         } finally {
-            setIsLoading(false); // Desativa o carregamento, independentemente do resultado
+            setIsLoading(false);
         }
     };
 
@@ -79,7 +79,6 @@ export default function LoginPage() {
                         {isLoading ? "A carregar..." : "Entrar"}
                     </button>
                     
-                    {/* Opcional: Link para a página de cadastro de usuário */}
                     <p className={styles.footerText}>
                         Não tem uma conta? 
                         <Link href="/cadastrar-usuario">
