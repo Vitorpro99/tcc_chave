@@ -1,15 +1,26 @@
 import { useRouter } from 'next/router';
 import styles from './Header.module.css';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 
 export default function Header() {
     
     const router = useRouter();
+    const [usuarioLogado, setUsuarioLogado] = useState(null);
+    useEffect(() => {
+        
+        const userDataString = localStorage.getItem('user');
+        if (userDataString) {
+            setUsuarioLogado(JSON.parse(userDataString));
+        }
+    }, []);
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        router.push('/login');
+        setUsuarioLogado(null); // Limpa o estado
+        router.push('/login'); // Redireciona para o login
     };
 
     return (
@@ -57,6 +68,25 @@ export default function Header() {
             </div>
 
             </nav>
+
+            <div className={styles.user_actions}>
+                {usuarioLogado ? (
+                    // 5. Se estiver LOGADO
+                    <>
+                        <span className={styles.welcomeMessage}>
+                            Olá, {usuarioLogado.nome}
+                        </span>
+                        <button onClick={handleLogout} className={styles.logoutButton}>
+                            Sair
+                        </button>
+                    </>
+                ) : (
+                    // 6. Se estiver DESLOGADO
+                    <Link href="/login" className={styles.loginButton}>
+                        Login
+                    </Link>
+                )}
+            </div>
             
 
 

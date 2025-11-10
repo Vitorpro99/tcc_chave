@@ -1,4 +1,4 @@
-/* ATUALIZADO: .app_header agora usa flex para separar os menus do login */
+
 .app_header {
   justify-content: space-between; /* Itens nas extremidades */
   display: flex;
@@ -25,11 +25,8 @@
 }
 
 .header_nav > ul > li {
-  /* Estilos para o <li>, se necessário */
+ 
 }
-
-/* ... (Todo o seu CSS de .dropdown, .dropdown_toggle, .dropdown_menu está perfeito) ... */
-
 .dropdown {
   position: relative;
 }
@@ -65,7 +62,7 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   list-style-type: none;
   padding: 10px 0;
-  /* margin-top: 10px; <-- Removido */
+  /* margin-top: 10px;  */
   min-width: 150px;
   z-index: 10;
   display: flex; 
@@ -94,16 +91,10 @@
 .dropdown_link:hover {
   background-color: #f0f0f0;
 }
-
-/* --- INÍCIO DAS NOVAS CLASSES --- */
-
-
 .user_actions {
   display: flex;
   align-items: center;
 }
-
-
 .loginButton {
   background-color: #ffffff;
   color: #C42020;
@@ -114,9 +105,28 @@
   font-weight: 500;
   transition: all 0.2s ease-in-out;
 }
-
 .loginButton:hover {
   background-color: #f0f0f0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
+.welcomeMessage {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-right: 1.5rem;
+}
+.logoutButton {
+    background-color: transparent;
+    color: white;
+    border: 1px solid #ffffff; /* Borda branca */
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.logoutButton:hover {
+    background-color: #ffffff;
+    color: #C42020; /* Inverte as cores no hover */
+}
