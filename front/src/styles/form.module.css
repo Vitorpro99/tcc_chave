@@ -81,3 +81,15 @@
     color: white;
     cursor: pointer;
 }
+.infoVeiculo {
+  background-color: #f9f9f9;
+  border-left: 4px solid #C42020;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+.infoVeiculo p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}

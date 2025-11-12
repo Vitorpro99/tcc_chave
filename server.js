@@ -38,6 +38,7 @@ require("./routes/seguro.routes.js") (app);
 require("./routes/setor.routes.js") (app);
 require("./routes/usuario.routes.js") (app);
 require("./routes/veiculo.routes.js") (app);
+require("./routes/transferencia.routes.js")(app); 
 
 app.listen(8000,function (req,res){
     console.log("App rodando na porta 8000");

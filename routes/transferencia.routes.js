@@ -11,7 +11,7 @@ module.exports = (app) =>{
     
     router.get("/:id",transferencia.findOne);
     
-    router.put("/:id",transferencia.update);
+    router.put("/:id/status", [verifyToken], transferencia.updateStatus);
     
     router.delete("/:id",transferencia.delete);
 
