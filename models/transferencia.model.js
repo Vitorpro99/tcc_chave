@@ -30,5 +30,5 @@ module.exports = (sequelize, Sequelize) => {
     {
         freezeTableName: true
     });
-    return Transferencia;
+    return transferencia;
 };

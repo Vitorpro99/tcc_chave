@@ -1,4 +1,4 @@
-import styles from "@/styles/form.module.css"; // Reutilizando seu CSS de formulário
+import styles from "@/styles/form.module.css";
 import { useState, useEffect } from "react";
 import api from "@/services/api";
 import { useRouter } from "next/router";
@@ -7,14 +7,12 @@ export default function TransferirVeiculoPage() {
     const router = useRouter();
     const { id: veiculoId } = router.query;
 
-    // Estados
     const [veiculo, setVeiculo] = useState(null);
     const [setores, setSetores] = useState([]);
     const [setorDestinoId, setSetorDestinoId] = useState(""); 
 
     useEffect(() => {
         if (veiculoId) {
-
             api.get(`/veiculos/${veiculoId}`)
                 .then(res => {
                     setVeiculo(res.data);
@@ -23,7 +21,6 @@ export default function TransferirVeiculoPage() {
                     console.error("Erro ao buscar veículo:", err);
                     alert("Não foi possível carregar os dados do veículo.");
                 });
-
 
             api.get("/setores")
                 .then(res => {
@@ -39,6 +36,12 @@ export default function TransferirVeiculoPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Adicionada uma verificação de segurança extra
+        if (!veiculo) {
+            alert("Erro: Os dados do veículo ainda não foram carregados.");
+            return;
+        }
+
         if (!setorDestinoId) {
             alert("Por favor, selecione um setor de destino.");
             return;
@@ -50,11 +53,9 @@ export default function TransferirVeiculoPage() {
         }
 
         const dadosTransferencia = {
-            veiculoId: parseInt(veiculoId),
+            veiculoId: veiculo.id, 
             setorDestinoId: parseInt(setorDestinoId),
-            setorOrigemId: veiculo.setorId, // O setor atual do veículo
-            // O 'usuarioSolicitanteId' será pego pelo backend (do token)
-            // O 'status' será 'pendente' por padrão (definido no modelo)
+            setorOrigemId: veiculo.setorId, 
         };
 
         try {
@@ -67,16 +68,21 @@ export default function TransferirVeiculoPage() {
         }
     };
 
+    // --- INÍCIO DA CORREÇÃO ---
+    // Adicionamos esta verificação de carregamento.
+    // O formulário só será renderizado quando 'veiculo' E 'setores' tiverem dados.
     if (!veiculo || setores.length === 0) {
         return (
             <div className={styles.body}>
                 <div className={styles.formDiv}>
-                    <h1 className={styles.title}>A carregar...</h1>
+                    <h1 className={styles.title}>A carregar dados...</h1>
                 </div>
             </div>
         );
     }
+    // --- FIM DA CORREÇÃO ---
 
+    // Se o código chegou aqui, 'veiculo' não é mais 'null' e podemos usá-lo.
     return (
         <div className={styles.body}>
             <div className={styles.formDiv}>
@@ -89,7 +95,6 @@ export default function TransferirVeiculoPage() {
                         <p><strong>Setor Atual:</strong> {veiculo.setor ? veiculo.setor.nome : "Não definido"}</p>
                     </div>
                     
-                    {/* Campo de Seleção do Destino */}
                     <label className={styles.label} htmlFor="setorDestinoId">Transferir para:</label>
                     <select
                         className={styles.input}
@@ -101,7 +106,6 @@ export default function TransferirVeiculoPage() {
                     >
                         <option value="" disabled>Selecione o setor de destino...</option>
                         
-                        {/* Filtra a lista de setores para NÃO mostrar o setor atual */}
                         {setores
                             .filter(setor => setor.id !== veiculo.setorId)
                             .map((setor) => (

@@ -1,5 +1,6 @@
 const express = require("express");
-const bodyPhaser = require("body-parser")
+const bodyPhaser = require("body-parser");
+
 const cors = require("cors")
 
 const app = express();
