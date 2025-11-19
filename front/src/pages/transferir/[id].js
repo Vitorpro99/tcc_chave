@@ -10,6 +10,7 @@ export default function TransferirVeiculoPage() {
     const [veiculo, setVeiculo] = useState(null);
     const [setores, setSetores] = useState([]);
     const [setorDestinoId, setSetorDestinoId] = useState(""); 
+    const [motivo, setMotivo] = useState("");
 
     useEffect(() => {
         if (veiculoId) {
@@ -55,7 +56,8 @@ export default function TransferirVeiculoPage() {
         const dadosTransferencia = {
             veiculoId: veiculo.id, 
             setorDestinoId: parseInt(setorDestinoId),
-            setorOrigemId: veiculo.setorId, 
+            setorOrigemId: veiculo.setorId,
+            motivo: motivo
         };
 
         try {
@@ -67,10 +69,6 @@ export default function TransferirVeiculoPage() {
             console.error(err);
         }
     };
-
-    // --- INÍCIO DA CORREÇÃO ---
-    // Adicionamos esta verificação de carregamento.
-    // O formulário só será renderizado quando 'veiculo' E 'setores' tiverem dados.
     if (!veiculo || setores.length === 0) {
         return (
             <div className={styles.body}>
@@ -80,9 +78,6 @@ export default function TransferirVeiculoPage() {
             </div>
         );
     }
-    // --- FIM DA CORREÇÃO ---
-
-    // Se o código chegou aqui, 'veiculo' não é mais 'null' e podemos usá-lo.
     return (
         <div className={styles.body}>
             <div className={styles.formDiv}>
@@ -114,6 +109,18 @@ export default function TransferirVeiculoPage() {
                                 </option>
                         ))}
                     </select>
+                    <label className={styles.label} htmlFor="motivo">Motivo da Transferência</label>
+                    <textarea
+                        className={styles.input}
+                        name="motivo"
+                        id="motivo"
+                        rows="3"
+                        placeholder="Ex: Necessidade operacional, manutenção, entre outros."
+                        required
+                        value={motivo}
+                        onChange={(e) => setMotivo(e.target.value)}
+                        style={{ resize: "vertical", fontFamily: "inherit" }}
+                    />
 
                     <button className={styles.mainButton} type="submit">Solicitar Transferência</button>
                 </form>

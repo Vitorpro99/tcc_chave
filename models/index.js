@@ -23,6 +23,7 @@ db.ipva     = require("./ipva.model.js") (sequelize, Sequelize);;
 db.manutencao = require("./manutencao.model.js") (sequelize, Sequelize);;
 db.multa    = require("./multa.model.js") (sequelize, Sequelize);;
 db.seguro   = require("./seguro.model.js") (sequelize, Sequelize);
+db.transferencia = require("./transferencia.model.js")(sequelize, Sequelize);
 module.exports = db;
 
 
@@ -85,3 +86,17 @@ db.veiculo.hasMany(db.multa, {
 db.multa.belongsTo(db.veiculo, {
     foreignKey: 'veiculoId'
 });
+db.veiculo.hasMany(db.transferencia, { foreignKey: 'veiculoId' });
+db.transferencia.belongsTo(db.veiculo, { foreignKey: 'veiculoId', as: 'veiculo' });
+
+// 2. Quem pediu?
+db.usuario.hasMany(db.transferencia, { foreignKey: 'usuarioSolicitanteId' });
+db.transferencia.belongsTo(db.usuario, { foreignKey: 'usuarioSolicitanteId', as: 'solicitante' });
+
+// 3. De onde veio? (Setor Origem)
+db.setor.hasMany(db.transferencia, { foreignKey: 'setorOrigemId' });
+db.transferencia.belongsTo(db.setor, { foreignKey: 'setorOrigemId', as: 'setorOrigem' });
+
+// 4. Para onde vai? (Setor Destino)
+db.setor.hasMany(db.transferencia, { foreignKey: 'setorDestinoId' });
+db.transferencia.belongsTo(db.setor, { foreignKey: 'setorDestinoId', as: 'setorDestino' });

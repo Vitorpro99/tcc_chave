@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Transferencia = sequelize.define("transferencia", {
+    const transferencia = sequelize.define("transferencia", {
         // ID do setor que está a enviar (o dono atual)
         setorOrigemId: {
             type: Sequelize.INTEGER,
@@ -25,6 +25,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         dataResolucao: {
             type: Sequelize.DATE
+        },
+        motivo: {
+            type: Sequelize.STRING,
+            allowNull: false
         }
     },
     {

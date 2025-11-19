@@ -5,13 +5,20 @@ const sequelize = db.sequelize;
 
 
 
-// ========================
-// 1. CRIAR NOVA TRANSFERÊNCIA
-// ========================
 exports.create = async (req, res) => {
     try {
         const { veiculoId, setorOrigemId, setorDestinoId, motivo } = req.body;
-        const solicitanteId = req.userId; // vem do token
+        
+        // CORREÇÃO 1: Pegamos o ID do token
+        const usuarioSolicitanteId = req.userId; 
+
+        // CORREÇÃO 2: Verificação de segurança extra
+        // Se o token falhou ou não tinha ID, paramos aqui.
+        if (!usuarioSolicitanteId) {
+            return res.status(401).send({ 
+                message: "Não foi possível identificar o usuário logado (Token inválido ou sem ID)." 
+            });
+        }
 
         if (!veiculoId || !setorOrigemId || !setorDestinoId || !motivo) {
             return res.status(400).send({
@@ -24,37 +31,45 @@ exports.create = async (req, res) => {
             setorOrigemId,
             setorDestinoId,
             motivo,
-            solicitanteId,
-            status: "pendente",
-            dataSolicitacao: new Date()
+            // CORREÇÃO 3: Usamos o nome exato que está no Modelo
+            usuarioSolicitanteId: usuarioSolicitanteId, 
+            status: "pendente"
+            // Nota: Não precisamos de 'dataSolicitacao', o Sequelize usa 'createdAt' automaticamente
         });
 
         return res.status(201).send(nova);
     } catch (err) {
+        console.error("Erro no create de transferência:", err); // Log no terminal ajuda muito
         return res.status(500).send({
             message: "Erro ao criar transferência: " + err.message
         });
     }
 };
-
 // ========================
 // 2. LISTAR TODAS AS TRANSFERÊNCIAS
 // ========================
-exports.findAll = async (req, res) => {
-    try {
-        const transferencias = await Transferencia.findAll({
-            include: [
-                { model: Veiculo, as: "veiculo" }
-            ],
-            order: [["createdAt", "DESC"]]
-        });
+exports.findAll = (req, res) => {
+    // Se quisermos filtrar (ex: mostrar só as pendentes)
+    const status = req.query.status;
+    var condition = status ? { status: status } : null;
 
-        return res.status(200).send(transferencias);
-    } catch (err) {
-        return res.status(500).send({
-            message: "Erro ao listar transferências: " + err.message
-        });
-    }
+    Transferencia.findAll({ 
+        where: condition,
+        // AQUI ESTÁ A MÁGICA: Trazemos os dados das outras tabelas
+        include: [
+            { model: db.veiculo, as: 'veiculo' }, 
+            { model: db.setor, as: 'setorOrigem' }, 
+            { model: db.setor, as: 'setorDestino' },
+            { model: db.usuario, as: 'solicitante' }
+        ],
+        order: [['createdAt', 'DESC']] // As mais recentes primeiro
+    })
+    .then(data => {
+        res.send(data);
+    })
+    .catch(err => {
+        res.status(500).send({ message: err.message || "Erro ao buscar transferências." });
+    });
 };
 
 // ========================
