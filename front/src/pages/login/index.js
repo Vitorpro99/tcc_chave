@@ -14,9 +14,9 @@ export default function LoginPage() {
     const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Impede o recarregamento da página
-        setIsLoading(true); // Ativa o feedback de carregamento
-        setError(""); // Limpa erros antigos
+        e.preventDefault(); 
+        setIsLoading(true); 
+        setError(""); 
 
         try {
             const response = await api.post("/usuarios/login", {
@@ -26,7 +26,6 @@ export default function LoginPage() {
 
             // Se o login for bem-sucedido
             if (response.data.accessToken) {
-                // Guarda o token e os dados do utilizador no localStorage
                 localStorage.setItem("token", response.data.accessToken);
                 localStorage.setItem("user", JSON.stringify(response.data));
 
@@ -81,7 +80,7 @@ export default function LoginPage() {
                     
                     <p className={styles.footerText}>
                         Não tem uma conta? 
-                        <Link href="/cadastrar-usuario">
+                        <Link href="/cadastro-usuario">
                             Registe-se
                         </Link>
                     </p>

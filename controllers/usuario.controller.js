@@ -7,38 +7,30 @@ const op = db.Sequelize.Op;
 var jwt = require('jsonwebtoken');
 var bycrypt = require('bcryptjs');
 const secretKey = "chavesegredodetoken";
-exports.create = (req,res) => {
-
-    if(!req.body.nome){
-        res.status(500).send({
-            message: "O nome não pode estar vazio."
-        });
-            return;
+exports.create = (req, res) => {
+    if (!req.body.nome) {
+        res.status(400).send({ message: "O nome não pode estar vazio." });
+        return;
     }
 
     const usuario = {
-        nome:       req.body.nome,
-        senha:      bycrypt.hashSync(req.body.senha,10),
-        email:      req.body.email,
+        nome: req.body.nome,
+        senha: bycrypt.hashSync(req.body.senha, 10),
+        email: req.body.email,
         numero_reg: req.body.numero_reg,
-        setor:      req.body.setor,
-        gestor:     req.body.gestor
-    }
+        setorId: req.body.setorId, 
+        gestor: req.body.gestor,
+        admin: req.body.admin || false 
+    };
 
     Usuario.create(usuario)
-        .then((data)=>{
-            res.send(data);
-        })
-        .catch((err)=>{
-            res.status(500).send({
-                message: err.message || "Erro durante a criação do usuario"
-            })
-        })
-
+        .then((data) => { res.send(data); })
+        .catch((err) => {
+            res.status(500).send({ message: err.message || "Erro ao criar usuario" });
+        });
 };
 
 exports.findAll = (req, res) => {
-    // Alterado para buscar por 'nome' em vez de 'marca'
     const nome = req.query.nome;
 
     var condition = nome ? { nome: { [Op.iLike]: `%${nome}%` } } : null;
@@ -140,34 +132,31 @@ exports.deleteAll = (req, res) => {
             });
         });
 };
-exports.login = (req,res) =>{
+exports.login = (req, res) => {
     Usuario.findOne({
-        where:{
-            email: req.body.email,
-        },
+        where: { email: req.body.email }
     })
-    .then((usuario)=>{
-        if(!usuario){
-            return res.status(404).send({message: "Usuário não encontrado com esse email!"});
+    .then((usuario) => {
+        if (!usuario) {
+            return res.status(404).send({ message: "Usuário não encontrado." });
         }
 
         var passwordIsValid = bycrypt.compareSync(req.body.senha, usuario.senha);
-        if(!passwordIsValid){
-            return res.status(401).send({
-                accessToken: null,
-                message: "Senha inválida!"
-            });
+        if (!passwordIsValid) {
+            return res.status(401).send({ accessToken: null, message: "Senha inválida!" });
         }
-        var token = jwt.sign({id:usuario.id}, secretKey, { expiresIn: 86400 });
+
+        var token = jwt.sign({ id: usuario.id }, secretKey, { expiresIn: 86400 });
+
         res.status(200).send({
             id: usuario.id,
             nome: usuario.nome,
             email: usuario.email,
             gestor: usuario.gestor,
+            admin: usuario.admin,
+            setorId: usuario.setorId,
             accessToken: token
         });
     })
-    .catch((err)=>{
-        res.status(500).send({message: "Erro ao tentar fazer login: " + err.message});
-    });
-}
+    .catch((err) => res.status(500).send({ message: err.message }));
+};

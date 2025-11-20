@@ -39,7 +39,8 @@ export default function Header() {
                             <li><Link href="/listaVeiculos" className={styles.dropdown_link}>Lista</Link></li>
                             <li><Link href="/transferencias" className={styles.dropdown_link}>Transferências</Link></li>
                             <li><Link href="/relatorios" className={styles.dropdown_link}>Relatórios</Link></li>
-                            <li><Link href="/transferencias" className={styles.dropdown_link}>Transferências</Link></li>
+                            <li><Link href="/dashboard" className={styles.dropdown_link}>Dashboard</Link></li>
+                            <li><Link href="/relatorios" className={styles.dropdown_link}>Relatórios</Link></li>
                         </ul>
                     </li>
                     <li className={styles.dropdown}>

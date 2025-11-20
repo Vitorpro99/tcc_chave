@@ -1,0 +1,65 @@
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f4f7f6; /* Fundo leve */
+    min-height: 90vh;
+}
+
+.title {
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    border-left: 5px solid #C42020;
+    padding-left: 15px;
+}
+
+/* Grid para os Cartões */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Estilo do Cartão Individual */
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+    border-top: 4px solid transparent; /* Preparação para cor no topo */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+/* Cores Específicas para cada tipo de cartão */
+.cardBlue { border-top-color: #0070f3; }
+.cardGreen { border-top-color: #28a745; }
+.cardOrange { border-top-color: #f5a623; }
+
+.cardTitle {
+    font-size: 1rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.cardValue {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.cardSub {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 5px;
+}

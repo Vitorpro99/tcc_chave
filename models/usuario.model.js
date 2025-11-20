@@ -1,18 +1,17 @@
-module.exports = (sequelize,Sequelize) =>{
+module.exports = (sequelize, Sequelize) => {
+    const Usuario = sequelize.define("usuario", {
+        nome: { type: Sequelize.STRING },
+        senha: { type: Sequelize.STRING },
+        email: { type: Sequelize.STRING },
+        numero_reg: { type: Sequelize.INTEGER },
 
+        setorId: { type: Sequelize.INTEGER },
 
-    const usuario = sequelize.define("usuario",
-        {
-            nome: {type: Sequelize.STRING},
-            senha: {type: Sequelize.STRING},
-            email: {type: Sequelize.STRING},
-            numero_reg: {type: Sequelize.INTEGER},
-            setor: {type: Sequelize.STRING},
-            gestor: { type: Sequelize.BOOLEAN}
-        },
-        {
-            freezeTableName: true
-        }
-    )
-    return usuario;
+        gestor: { type: Sequelize.BOOLEAN }, 
+        admin: { type: Sequelize.BOOLEAN }  
+    },
+    {
+        freezeTableName: true
+    });
+    return Usuario;
 }

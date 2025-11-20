@@ -28,12 +28,22 @@ module.exports = db;
 
 
 // Relação 1:1 entre Usuário e Setor
-db.usuario.hasOne(db.setor, {
-    as: 'setorResponsavel',
-    foreignKey: 'usuarioId'
+// db.usuario.hasOne(db.setor, {
+//     as: 'setorResponsavel',
+//     foreignKey: 'usuarioId'
+// });
+// db.setor.belongsTo(db.usuario, {
+//     foreignKey: 'usuarioId'
+// });
+
+db.setor.hasMany(db.usuario, {
+    as: 'funcionarios', // Um setor tem muitos funcionários
+    foreignKey: 'setorId'
 });
-db.setor.belongsTo(db.usuario, {
-    foreignKey: 'usuarioId'
+
+db.usuario.belongsTo(db.setor, {
+    as: 'setorTrabalho', // O usuário pertence a um setor de trabalho
+    foreignKey: 'setorId'
 });
 
 // Relação 1:* entre Setor e Veículo

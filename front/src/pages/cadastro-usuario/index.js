@@ -6,45 +6,58 @@ import { useRouter } from "next/router";
 export default function UsuarioPage() {
     const router = useRouter();
 
+
+    const [nome, setNome] = useState("");
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [numeroReg, setNumeroReg] = useState("");
     const [setorId, setSetorId] = useState("");
+    const [gestor, setGestor] = useState(false); 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const { nome, senha, email, numero_reg, setorId, gestor } = e.target;
+    const [setores, setSetores] = useState([]);
 
-        var usuarioSalvar = {
-            nome: nome.value,
-            senha: senha.value,
-            email: email.value,
-            numero_reg: numero_reg.value,
-            setorId: parseInt(setorId),
-            gestor: gestor.checked,
-        };
-
-        api
-            .post("/usuarios", usuarioSalvar)
+    // 2. Buscar setores ao carregar a página
+    useEffect(() => {
+        api.get("/setores")
             .then((res) => {
-                alert("Usuário cadastrado com sucesso!");
-                router.push("/");
+                setSetores(res.data);
             })
             .catch((err) => {
-                alert("Erro ao cadastrar usuário");
-                alert(err?.response?.data?.message ?? err.message);
+                console.error("Erro ao buscar setores:", err);
+                alert("Não foi possível carregar a lista de setores.");
             });
-    };
+    }, []);
 
-        const [setores, setSetores] = useState([]);
-    
-        useEffect(() => {
-            api.get("/setores") 
-                .then((res) => {
-                    setSetores(res.data);
-                })
-                .catch((err) => {
-                    console.error("Erro ao buscar setores:", err);
-                    alert("Não foi possível carregar a lista de setores.");
-                });
-        }, []); 
+    // 3. Função de Envio Corrigida
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Validação simples para garantir que um setor foi escolhido
+        if (!setorId) {
+            alert("Por favor, selecione um setor.");
+            return;
+        }
+
+        var usuarioSalvar = {
+            nome: nome,
+            senha: senha,
+            email: email,
+            numero_reg: numeroReg,
+            setorId: parseInt(setorId), 
+            
+            gestor: gestor,
+        };
+
+        try {
+            await api.post("/usuarios", usuarioSalvar);
+            alert("Usuário cadastrado com sucesso!");
+            // Redireciona para o login para testar o novo usuário imediatamente
+            router.push("/login"); 
+        } catch (err) {
+            alert("Erro ao cadastrar usuário");
+            alert(err?.response?.data?.message ?? err.message);
+        }
+    };
 
     return (
         <div className={styles.body}>
@@ -54,21 +67,53 @@ export default function UsuarioPage() {
                     
                     {/* Nome */}
                     <label className={styles.label} htmlFor="nome">Nome Completo</label>
-                    <input className={styles.input} name="nome" type="text" placeholder="Digite o nome do usuário" required />
+                    <input 
+                        className={styles.input} 
+                        name="nome" 
+                        type="text" 
+                        placeholder="Digite o nome do usuário" 
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
+                        required 
+                    />
                     
                     {/* E-mail */}
                     <label className={styles.label} htmlFor="email">E-mail</label>
-                    <input className={styles.input} name="email" type="email" placeholder="Digite o e-mail" required />
+                    <input 
+                        className={styles.input} 
+                        name="email" 
+                        type="email" 
+                        placeholder="Digite o e-mail" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required 
+                    />
 
                     {/* Senha */}
                     <label className={styles.label} htmlFor="senha">Senha</label>
-                    <input className={styles.input} name="senha" type="password" placeholder="Crie uma senha" required />
+                    <input 
+                        className={styles.input} 
+                        name="senha" 
+                        type="password" 
+                        placeholder="Crie uma senha" 
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                        required 
+                    />
                     
                     {/* Número de Registro */}
                     <label className={styles.label} htmlFor="numero_reg">Número de Registro</label>
-                    <input className={styles.input} name="numero_reg" type="text" placeholder="Matrícula ou CNH" />
+                    <input 
+                        className={styles.input} 
+                        name="numero_reg" 
+                        type="text" 
+                        placeholder="Matrícula ou CNH" 
+                        value={numeroReg}
+                        onChange={(e) => setNumeroReg(e.target.value)}
+                    />
 
-                    {/* Setor */}
+                    {/* Setor (Dropdown) */}
+                    <label className={styles.label} htmlFor="setorId">Setor</label>
                      <select
                         className={styles.input}
                         name="setorId"
@@ -84,9 +129,17 @@ export default function UsuarioPage() {
                             </option>
                         ))}
                     </select>
+
                     {/* Gestor */}
                     <div className={styles.checkboxContainer}>
-                        <input className={styles.checkbox} id="gestor" name="gestor" type="checkbox" />
+                        <input 
+                            className={styles.checkbox} 
+                            id="gestor" 
+                            name="gestor" 
+                            type="checkbox" 
+                            checked={gestor}
+                            onChange={(e) => setGestor(e.target.checked)}
+                        />
                         <label className={styles.label} htmlFor="gestor">É gestor?</label>
                     </div>
 
