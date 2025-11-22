@@ -42,13 +42,13 @@ module.exports = (app) =>{
     
     router.get("/",[verifyToken],veiculo.findAll);
     
-    router.get("/:id",veiculo.findOne);
+    router.get("/:id", [verifyToken],veiculo.findOne);
     
     router.put("/:id",veiculo.update);
     
     router.delete("/:id",veiculo.delete);
 
-    router.delete("/",veiculo.deleteAll);
+    // router.delete("/",veiculo.deleteAll);
 
     app.use("/veiculos",router);
 };

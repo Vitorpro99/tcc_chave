@@ -1,112 +1,109 @@
 const config = require("../config/db.config.js");
-
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
 
+const sequelize = new Sequelize(
     config.DB,
     config.USER,
     config.PASSWORD,
     config
-
 );
 
-const db = { };
+const db = {};
 
 db.Sequelize = Sequelize;
-
 db.sequelize = sequelize;
 
-db.veiculo  = require("./veiculo.model.js") (sequelize, Sequelize);
-db.usuario  = require("./usuario.model.js") (sequelize, Sequelize);
-db.setor    = require("./setor.model.js") (sequelize, Sequelize);; 
-db.ipva     = require("./ipva.model.js") (sequelize, Sequelize);;
-db.manutencao = require("./manutencao.model.js") (sequelize, Sequelize);;
-db.multa    = require("./multa.model.js") (sequelize, Sequelize);;
-db.seguro   = require("./seguro.model.js") (sequelize, Sequelize);
+// Importação dos Modelos
+db.veiculo  = require("./veiculo.model.js")(sequelize, Sequelize);
+db.usuario  = require("./usuario.model.js")(sequelize, Sequelize);
+db.setor    = require("./setor.model.js")(sequelize, Sequelize);
+db.ipva     = require("./ipva.model.js")(sequelize, Sequelize);
+db.manutencao = require("./manutencao.model.js")(sequelize, Sequelize);
+db.multa    = require("./multa.model.js")(sequelize, Sequelize);
+db.seguro   = require("./seguro.model.js")(sequelize, Sequelize);
 db.transferencia = require("./transferencia.model.js")(sequelize, Sequelize);
+
 module.exports = db;
 
+// ==========================================
+// DEFINIÇÃO DAS RELAÇÕES
+// ==========================================
 
-// Relação 1:1 entre Usuário e Setor
-// db.usuario.hasOne(db.setor, {
-//     as: 'setorResponsavel',
-//     foreignKey: 'usuarioId'
-// });
-// db.setor.belongsTo(db.usuario, {
-//     foreignKey: 'usuarioId'
-// });
-
+// --- 1. Usuário e Setor ---
 db.setor.hasMany(db.usuario, {
-    as: 'funcionarios', // Um setor tem muitos funcionários
+    as: 'funcionarios',
     foreignKey: 'setorId'
 });
-
 db.usuario.belongsTo(db.setor, {
-    as: 'setorTrabalho', // O usuário pertence a um setor de trabalho
+    as: 'setorTrabalho',
     foreignKey: 'setorId'
 });
 
-// Relação 1:* entre Setor e Veículo
+// --- 2. Veículo e Setor ---
 db.setor.hasMany(db.veiculo, {
     as: 'veiculosSetor',
     foreignKey: 'setorId'
 });
+// CORREÇÃO IMPORTANTE: Adicionado as: 'setor' para bater com o Controller
 db.veiculo.belongsTo(db.setor, {
+    as: 'setor', // <--- ESTA LINHA É OBRIGATÓRIA
     foreignKey: 'setorId'
 });
 
-// Relação 1:1 entre Veículo e IPVA
+// --- 3. Veículo e IPVA (1:N) ---
+// Um veículo tem muitos IPVAs (histórico)
 db.veiculo.hasMany(db.ipva, {
     as: 'ipvaVeiculo', 
     foreignKey: 'veiculoId'
 });
 db.ipva.belongsTo(db.veiculo, {
+    as: 'veiculo', // Simplificado
     foreignKey: 'veiculoId'
 });
 
-// Adicione um alias aqui para resolver a colisão.
-db.ipva.belongsTo(db.veiculo, {
-    as: 'veiculoAssociado', 
-    foreignKey: 'veiculoId'
-});
-
-// Relação 1:* entre Veículo e Manutenção
+// --- 4. Veículo e Manutenção ---
 db.veiculo.hasMany(db.manutencao, {
     as: 'manutencoes',
     foreignKey: 'veiculoId'
 });
 db.manutencao.belongsTo(db.veiculo, {
+    as: 'veiculo', // É útil ter o inverso também
     foreignKey: 'veiculoId'
 });
 
-// Relação 1:1 entre Veículo e Seguro
+// --- 5. Veículo e Seguro ---
 db.veiculo.hasOne(db.seguro, {
     as: 'seguro',
     foreignKey: 'veiculoId'
 });
 db.seguro.belongsTo(db.veiculo, {
+    as: 'veiculo',
     foreignKey: 'veiculoId'
 });
 
-// Relação 1:* entre Veículo e Multa
+// --- 6. Veículo e Multa ---
 db.veiculo.hasMany(db.multa, {
     as: 'multas',
     foreignKey: 'veiculoId'
 });
 db.multa.belongsTo(db.veiculo, {
+    as: 'veiculo',
     foreignKey: 'veiculoId'
 });
+
+// --- 7. Transferências ---
+// Veículo
 db.veiculo.hasMany(db.transferencia, { foreignKey: 'veiculoId' });
 db.transferencia.belongsTo(db.veiculo, { foreignKey: 'veiculoId', as: 'veiculo' });
 
-// 2. Quem pediu?
+// Solicitante (Usuário)
 db.usuario.hasMany(db.transferencia, { foreignKey: 'usuarioSolicitanteId' });
 db.transferencia.belongsTo(db.usuario, { foreignKey: 'usuarioSolicitanteId', as: 'solicitante' });
 
-// 3. De onde veio? (Setor Origem)
+// Setor Origem
 db.setor.hasMany(db.transferencia, { foreignKey: 'setorOrigemId' });
 db.transferencia.belongsTo(db.setor, { foreignKey: 'setorOrigemId', as: 'setorOrigem' });
 
-// 4. Para onde vai? (Setor Destino)
+// Setor Destino
 db.setor.hasMany(db.transferencia, { foreignKey: 'setorDestinoId' });
 db.transferencia.belongsTo(db.setor, { foreignKey: 'setorDestinoId', as: 'setorDestino' });

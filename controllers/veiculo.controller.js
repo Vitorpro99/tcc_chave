@@ -1,163 +1,176 @@
 const db = require("../models");
-
 const Veiculo = db.veiculo;
 const Setor = db.setor;
+const Usuario = db.usuario; // Importante para a segurança
 const Op = db.Sequelize.Op;
 
-exports.create = (req,res) =>{
-    if(!req.body.marca){
-        res.status(400).send({
-            message:"Veiculo não pode estar sem marca"
-        })
+// =====================================================================
+// 1. CRIAR VEÍCULO
+// =====================================================================
+exports.create = (req, res) => {
+    if (!req.body.marca || !req.body.placa) {
+        res.status(400).send({ message: "Conteúdo não pode ser vazio!" });
         return;
     }
+
     const veiculo = {
-        marca:          req.body.marca,
-        modelo:         req.body.modelo,
-        ano:            req.body.ano,
-        cor:            req.body.cor,
-        kilometragem:   req.body.kilometragem,
-        // possuidor: {type: Sequelize},
-        dataAquisicao:  req.body.data,
-        placa:          req.body.placa,
-        setorId:        req.body.setorId,
-        foto:           req.body.foto,
-        
+        marca: req.body.marca,
+        modelo: req.body.modelo,
+        ano: req.body.ano,
+        cor: req.body.cor,
+        placa: req.body.placa,
+        dataAquisicao: req.body.dataAquisicao,
+        setorId: req.body.setorId
     };
+
     Veiculo.create(veiculo)
-        .then((data)=>{
-            res.send(data);
-        })
-        .catch((err)=>{
-            res.status(500).send({
-                message: err.message || "Erro durante a criação de Veiculo"
-            });
+        .then(data => { res.send(data); })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "Erro ao criar veículo." });
         });
 };
 
-exports.findAll = (req,res) =>{
-    const marca  = req.query.marca
-    
-    var condition = marca ? { marca: { [Op.iLike]: `%${marca}%` } } : null;
+// =====================================================================
+// 2. LISTAR TODOS (COM FILTRO DE SEGURANÇA)
+// =====================================================================
+exports.findAll = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const usuario = await Usuario.findByPk(userId);
 
-    Veiculo.findAll({where: condition, include: [db.setor]})
-
-    
-
-        .then((data)=>{
-            res.send(data);
-        })
-        .catch((err)=>{
-            res.status(500).send({
-                message: err.message || "Erro durante a procura por Veiculo",
-            })
-        })
-};
-
-exports.findOne = (req, res) => {
-    const id = req.params.id;
-
-    Veiculo.findByPk(id, {
-        include: [
-            db.setor,
-            {
-                model: db.manutencao,
-                as: 'manutencoes'
-            },
-            {
-                model: db.multa,
-                as: 'multas'
-            },
-            {
-                model: db.ipva,
-                as: 'ipvaVeiculo'
-            }
-        ]
-    })
-        .then((data) => {
-            if (data) {
-                res.send(data);
-            } else {
-                res.status(404).send({
-                    message: `Não foi possível encontrar o Veículo com o id=${id}.`,
-                });
-            }
-        })
-        .catch((err) => {
-            res.status(500).send({
-                message: "Erro na busca pelo Veículo com id=" + id,
-            });
-        });
-};
-
-exports.update = (req,res) =>{
-    const id = req.params.id;
-
-    Veiculo.update(req.body, {
-        where: {id: id},
-    })
-        .then((num)=>{
-            if(num == 1){
-                res.send({
-                    message: "Veiculo atualizado com sucesso."
-                });
-            }
-            else{
-                res.send({
-                    message: `Não foi possivel atualizar o Veiculo com o id= ${id}. Talvez o Veiculo
-                    não tenha sido encontrado ou req.body está vazio!`,
-                })
-            } 
-        })
-        .catch((err)=>{
-            res.status(500).send({
-                message:"Erro em atualizar o Veiculo via id=" + id,
-            });
-        });
-};
-
-exports.delete = (req,res) =>{
-    const id = req.params.id;
-
-    Veiculo.destroy({
-        where: { id:id },
-    })
-        .then((num)=>{
-            if(num == 1){
-                res.send({
-                    message: "Veiculo deletado com sucesso!",
-                })
-            }
-            else{
-                res.send({
-                    message: `Não é possivel deletar esse Veiculo. Não encontrado`
-                })
-            }
+        // SEGURANÇA: Verifica se o usuário existe
+        if (!usuario) {
+            return res.status(401).send({ message: "Usuário não encontrado. Faça login novamente." });
         }
-    )
-    .catch((err)=>{
-        res.status(500).send({
-            message:"Não é possivel deletar o Veiculo com o id" + id,
-        })
-    })
 
+        let condition = {};
+
+        // Se não for admin, vê apenas carros do seu setor
+        if (!usuario.admin) {
+            if (!usuario.setorId) return res.send([]); 
+            condition.setorId = usuario.setorId;
+        }
+
+        const veiculos = await Veiculo.findAll({
+            where: condition,
+            include: [
+                { model: Setor, as: 'setor' }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+
+        res.send(veiculos);
+    } catch (err) {
+        res.status(500).send({ message: err.message || "Erro ao buscar veículos." });
+    }
 };
 
-exports.deleteAll = (req,res) =>{
-    Veiculo.destroy({
-        where: {},
-        truncate: false,
-    })
-        .then((nums)=>{
-            res.send({message: `${nums} Veiculos foram deletados com sucesso!` })
-        })
-        .catch((err)=>{
-            res.status(500).send({
-                message: err.message || "Erro enquanto deletava os Veiculos"
-            })
-        })
+// =====================================================================
+// 3. BUSCAR UM (DETALHES + SEGURANÇA)
+// =====================================================================
+exports.findOne = async (req, res) => {
+    const id = req.params.id;
+    const userId = req.userId;
+
+    console.log("=================================");
+    console.log("DEBUG: ID do Veículo solicitado:", id);
+    console.log("DEBUG: ID do Usuário vindo do Token:", userId);
+
+    try {
+        const usuario = await Usuario.findByPk(userId);
+
+        console.log("DEBUG: Resultado da busca no banco:", usuario);
+        console.log("=================================");
+        
+        // SEGURANÇA: Verifica se o usuário existe
+        if (!usuario) {
+            return res.status(401).send({ message: "Usuário não encontrado. Faça login novamente." });
+        }
+
+        const veiculo = await Veiculo.findByPk(id, {
+            include: [
+                { model: db.setor, as: 'setor' }, 
+                { model: db.manutencao, as: 'manutencoes' },
+                { model: db.multa, as: 'multas' },
+                { model: db.ipva, as: 'ipvaVeiculo' }
+            ]
+        });
+
+        if (!veiculo) {
+            return res.status(404).send({ message: "Veículo não encontrado." });
+        }
+
+        // Segurança de Setor
+        if (!usuario.admin && veiculo.setorId !== usuario.setorId) {
+            return res.status(403).send({ message: "Acesso negado a este veículo." });
+        }
+
+        res.send(veiculo);
+
+    } catch (err) {
+        console.error("ERRO NO FINDONE:", err); 
+        res.status(500).send({ message: "Erro ao buscar veículo: " + err.message });
+    }
 };
 
-// exports. = (req,res) =>{
+// =====================================================================
+// 4. ATUALIZAR
+// =====================================================================
+exports.update = async (req, res) => {
+    const id = req.params.id;
+    const userId = req.userId;
 
-// };
+    try {
+        const usuario = await Usuario.findByPk(userId);
+        
+        // SEGURANÇA: Adicionada aqui também
+        if (!usuario) {
+            return res.status(401).send({ message: "Usuário não encontrado. Faça login novamente." });
+        }
+
+        const veiculo = await Veiculo.findByPk(id);
+
+        if (!veiculo) return res.status(404).send({ message: "Veículo não encontrado." });
+
+        if (!usuario.admin && veiculo.setorId !== usuario.setorId) {
+            return res.status(403).send({ message: "Acesso negado." });
+        }
+
+        await Veiculo.update(req.body, { where: { id: id } });
+        res.send({ message: "Veículo atualizado com sucesso." });
+
+    } catch (err) {
+        res.status(500).send({ message: "Erro ao atualizar veículo." });
+    }
+};
+
+// =====================================================================
+// 5. EXCLUIR
+// =====================================================================
+exports.delete = async (req, res) => {
+    const id = req.params.id;
+    const userId = req.userId;
+
+    try {
+        const usuario = await Usuario.findByPk(userId);
+        
+        // SEGURANÇA: Adicionada aqui também
+        if (!usuario) {
+            return res.status(401).send({ message: "Usuário não encontrado. Faça login novamente." });
+        }
+
+        const veiculo = await Veiculo.findByPk(id);
+
+        if (!veiculo) return res.status(404).send({ message: "Veículo não encontrado." });
+
+        if (!usuario.admin && veiculo.setorId !== usuario.setorId) {
+            return res.status(403).send({ message: "Acesso negado." });
+        }
+
+        await Veiculo.destroy({ where: { id: id } });
+        res.send({ message: "Veículo excluído com sucesso!" });
+
+    } catch (err) {
+        res.status(500).send({ message: "Erro ao excluir veículo." });
+    }
+};

@@ -49,24 +49,49 @@ exports.findAll = (req, res) => {
 };
 
 // Busca um único registro de IPVA pelo ID
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
+    const userId = req.userId;
 
-    Ipva.findByPk(id)
-        .then((data) => {
-            if (data) {
-                res.send(data);
-            } else {
-                res.status(404).send({
-                    message: `Não foi possível encontrar o registro de IPVA com o id=${id}.`,
+    try {
+        // 1. Busca o Usuário
+        const usuario = await Usuario.findByPk(userId);
+        if (!usuario) {
+            return res.status(404).send({ message: "Usuário não encontrado." });
+        }
+
+        // 2. Busca o Veículo com todas as relações
+        // NOTA: Se der erro aqui, verifique se os 'as' batem com o models/index.js
+        const veiculo = await Veiculo.findByPk(id, {
+            include: [
+                { model: db.setor, as: 'setor' }, // Traz o setor (se tiver relação 'as: setor') ou remova o 'as' se não tiver
+                { model: db.manutencao, as: 'manutencoes' },
+                { model: db.multa, as: 'multas' },
+                { model: db.ipva, as: 'ipvaVeiculo' }
+            ]
+        });
+
+        if (!veiculo) {
+            return res.status(404).send({ message: "Veículo não encontrado." });
+        }
+
+        // 3. VERIFICAÇÃO DE SEGURANÇA (BLINDAGEM)
+        if (!usuario.admin) {
+            // Se o usuário tiver setor definido E o veículo tiver setor definido
+            // E eles forem diferentes -> BLOQUEIA
+            if (usuario.setorId && veiculo.setorId && veiculo.setorId !== usuario.setorId) {
+                return res.status(403).send({ 
+                    message: "Acesso negado: Este veículo pertence a outro setor." 
                 });
             }
-        })
-        .catch((err) => {
-            res.status(500).send({
-                message: "Erro na busca pelo registro de IPVA com id=" + id,
-            });
-        });
+        }
+
+        res.send(veiculo);
+
+    } catch (err) {
+        console.error("ERRO NO FINDONE:", err); // Isto vai mostrar o erro real no terminal
+        res.status(500).send({ message: "Erro ao buscar veículo: " + err.message });
+    }
 };
 
 // Atualiza um registro de IPVA pelo ID

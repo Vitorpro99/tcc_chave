@@ -7,5 +7,7 @@ module.exports = (app) => {
     // Rota: GET /relatorios/manutencoes?dataInicio=...&dataFim=...
     router.get("/manutencoes", [verifyToken], relatorio.getRelatorioManutencao);
 
+    router.get("/multas", [verifyToken], relatorio.getRelatorioMultas);
+
     app.use("/relatorios", router);
 };

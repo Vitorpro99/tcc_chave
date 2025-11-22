@@ -2,6 +2,7 @@ const db = require("../models");
 const Transferencia = db.transferencia;
 const Veiculo = db.veiculo;
 const sequelize = db.sequelize;
+const Usuario = db.usuario;
 
 
 
@@ -48,28 +49,51 @@ exports.create = async (req, res) => {
 // ========================
 // 2. LISTAR TODAS AS TRANSFERÊNCIAS
 // ========================
-exports.findAll = (req, res) => {
-    // Se quisermos filtrar (ex: mostrar só as pendentes)
-    const status = req.query.status;
-    var condition = status ? { status: status } : null;
+exports.findAll = async (req, res) => {
+    console.log("1. Iniciando findAll de veículos...");
+    try {
+        const userId = req.userId;
+        console.log("2. ID do usuário:", userId);
+        
+        const usuario = await Usuario.findByPk(userId);
+        console.log("3. Usuário encontrado:", usuario ? usuario.nome : "Não");
 
-    Transferencia.findAll({ 
-        where: condition,
-        // AQUI ESTÁ A MÁGICA: Trazemos os dados das outras tabelas
-        include: [
-            { model: db.veiculo, as: 'veiculo' }, 
-            { model: db.setor, as: 'setorOrigem' }, 
-            { model: db.setor, as: 'setorDestino' },
-            { model: db.usuario, as: 'solicitante' }
-        ],
-        order: [['createdAt', 'DESC']] // As mais recentes primeiro
-    })
-    .then(data => {
-        res.send(data);
-    })
-    .catch(err => {
-        res.status(500).send({ message: err.message || "Erro ao buscar transferências." });
-    });
+        if (!usuario) {
+            console.log("4. Usuário não encontrado, retornando 404");
+            return res.status(404).send({ message: "Usuário não encontrado." });
+        }
+
+        let condition = {};
+
+        if (!usuario.admin) {
+            console.log("5. Usuário não é admin. Setor ID:", usuario.setorId);
+            if (!usuario.setorId) {
+                console.log("6. Usuário sem setor. Retornando lista vazia.");
+                return res.send([]); 
+            }
+            condition.setorId = usuario.setorId;
+        } else {
+            console.log("5. Usuário é admin. Vendo tudo.");
+        }
+
+        console.log("7. Buscando veículos no banco com condição:", condition);
+        const veiculos = await Veiculo.findAll({
+            where: condition,
+            include: [
+                { model: Setor, as: 'setor' }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+        console.log("8. Veículos encontrados:", veiculos.length);
+
+        res.send(veiculos);
+
+    } catch (err) {
+        console.error("ERRO FATAL NO FINDALL:", err);
+        res.status(500).send({
+            message: err.message || "Erro ao buscar veículos."
+        });
+    }
 };
 
 // ========================
@@ -128,7 +152,7 @@ exports.updateStatus = async (req, res) => {
             message: `Transferência ${status} com sucesso!`
         });
     } catch (err) {
-        await t.rollback();
+         await t.rollback();
         return res.status(500).send({
             message: "Erro ao processar a transferência: " + err.message
         });
