@@ -1,0 +1,181 @@
+/* Container Principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 350px 1fr; /* Coluna fixa + O que sobrar */
+    gap: 2rem;
+    align-items: start;
+}
+
+/* --- CARTÃO DE RESUMO (ESQUERDA) --- */
+.summaryCard {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    text-align: center;
+    border-top: 5px solid #C42020;
+    position: sticky; /* Fica fixo ao rolar a página */
+    top: 2rem;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    background-color: #eee;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #aaa;
+}
+
+.carTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.carPlate {
+    background-color: #eef;
+    color: #0070f3;
+    padding: 0.2rem 0.8rem;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;
+    margin: 0.5rem 0 1.5rem 0;
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+
+.infoList {
+    text-align: left;
+    margin-top: 1.5rem;
+}
+
+.infoItem {
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* --- ÁREA DE CONTEÚDO (DIREITA) --- */
+.contentArea {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    min-height: 500px;
+}
+
+/* Sistema de Abas */
+.tabs {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 2rem;
+}
+
+.tabButton {
+    background: none;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #666;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.tabButton:hover {
+    color: #C42020;
+    background-color: #fff5f5;
+}
+
+.activeTab {
+    color: #C42020;
+    border-bottom-color: #C42020;
+}
+
+/* Tabelas Internas */
+.miniTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.miniTable th {
+    text-align: left;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.miniTable td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.actionButtons {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btnPrint { background-color: #333; color: white; }
+.btnBack { background-color: #eee; color: #333; }
+
+/* --- REGRAS DE IMPRESSÃO (MÁGICA) --- */
+@media print {
+    .container {
+        display: block; /* Remove o grid */
+        padding: 0;
+    }
+    .summaryCard {
+        position: static; /* Remove o sticky */
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 2rem;
+    }
+    .tabs, .actionButtons, .no-print {
+        display: none !important; /* Esconde botões e abas */
+    }
+    .contentArea {
+        box-shadow: none;
+        padding: 0;
+    }
+    /* Força todas as secções a aparecerem na impressão, ignorando o estado da aba */
+    .tabContent {
+        display: block !important; 
+        margin-bottom: 3rem;
+        page-break-inside: avoid; /* Evita quebrar tabelas ao meio */
+    }
+    .tabTitlePrint {
+        display: block !important; /* Mostra títulos das secções no papel */
+        border-bottom: 2px solid #000;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Esconde títulos de secção na tela (só para impressão) */
+.tabTitlePrint { display: none; }

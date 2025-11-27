@@ -1,64 +1,136 @@
-.table{
-    /* border: 1px solid #C42020; */
-    border-collapse: collapse;
-
-}
-.table td{
-    border-top: 1px solid #C42020;
-    border-bottom: 1px solid #C42020;
-    padding: 1rem;
-}
-.table th{
-    row-gap: 1rem;
-    padding : 1rem;
-    background-color: #C42020;
-    color: white;
-    border-right: 1px solid white;
-}
-.th.fixed{
-    top: 0;
-    z-index: 2;
-    position: sticky;
-
-}
-.div_tabela{
-    overflow-y: scroll;
-    display:block;
-    max-height: 750px;
-    border: 1px solid #C42020
-}
-.container{
+/* Container Principal da Página */
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+    /* Detalhe visual vermelho à esquerda */
+    border-left: 5px solid #C42020;
+    padding-left: 15px;
+}
+
+/* Container da Tabela (O "Cartão") */
+.div_tabela {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden; /* Garante que o border-radius funcione */
+    border: 1px solid #eaeaea;
+    
+    /* Scroll se a tabela for muito grande */
+    max-height: 750px; 
+    overflow-y: auto; 
+}
+
+/* A Tabela em si */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+/* Cabeçalho da Tabela */
+.table th {
+    background-color: #C42020;
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    
+    /* Cabeçalho Fixo (Sticky) */
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Fica acima do conteúdo */
+}
+
+/* Linhas e Células */
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee; /* Linha subtil apenas em baixo */
+    color: #555;
+    vertical-align: middle;
+}
+
+/* Efeito Hover na Linha Inteira */
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #fff5f5; /* Um vermelho muito clarinho */
+    cursor: pointer;
+}
+
+/* Remove a borda da última linha para ficar bonito no cartão */
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- PAGINAÇÃO --- */
+.pagination {
+    display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 2rem;
+    gap: 5px;
 }
-.emptyRow{
-    border-right: 1px solid transparent;
-}
-.title{
-     font-size: 2rem;
-    font-weight: 600;
-    color:#8b2c2c;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-}
-.pageButton{
-    color:#C42020;
+
+.pageButton {
     background-color: white;
-    padding: 0.2rem;
-    margin-top: 1rem;
-    border: 1px solid #C42020;
-    border-radius: 5px;
-    margin-left: 0.5rem;
+    color: #555;
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 40px; /* Largura mínima para números */
 }
-.pageButton:hover{
-    color:white;
-    cursor:pointer;
-    background-color: #C42020;
+
+.pageButton:hover:not(:disabled) {
+    border-color: #C42020;
+    color: #C42020;
+    background-color: #fff;
 }
-.pageButton.active{
-    color:white;
+
+.pageButton:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: #f9f9f9;
+}
+
+/* Botão da página atual */
+.pageButton.active, 
+.active { /* Mantendo compatibilidade com seu JSX */
     background-color: #C42020;
+    color: white;
+    border-color: #C42020;
+    font-weight: bold;
+}
+
+/* Scrollbar Personalizada (Opcional, mas fica bonito) */
+.div_tabela::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.div_tabela::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+.div_tabela::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 4px;
+}
+.div_tabela::-webkit-scrollbar-thumb:hover {
+    background: #999; 
 }

@@ -1,95 +1,168 @@
-.body{
-    display:flex;
+/* Centraliza o formulário na tela */
+.body {
+    display: flex;
     justify-content: center;
     align-items: center;
-}
-.form{
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items : center;
-    background-color: rgb(241, 241, 241);
+    min-height: 85vh;
     padding: 2rem;
-    border: 1px solid #C42020;
-    border-radius: 20px;
-    gap:0.3rem
-    
+    background-color: #f4f7f6; /* Fundo leve da página */
 }
-.title{
-    font-size: 2rem;
+
+/* O Cartão do Formulário */
+.formDiv {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Sombra elegante */
+    border: 1px solid #eaeaea;
+    width: 100%;
+    max-width: 500px; /* Largura máxima ideal para leitura */
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* Espaçamento uniforme entre campos */
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+/* Labels */
+.label {
+    font-size: 0.95rem;
     font-weight: 600;
-    color:#8b2c2c;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #555;
+    margin-bottom: 0.3rem;
+    display: block; /* Garante que fique acima do input */
 }
-.formDiv{
-    width: fit-content;
-    margin-top: 2rem;
+
+/* Inputs Gerais */
+.input, .inputPlaca, select.input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #fcfcfc;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.2s ease;
+    box-sizing: border-box; /* Importante para não estourar a largura */
+}
+
+/* Efeito de Foco (Quando clica no campo) */
+.input:focus, .inputPlaca:focus, select.input:focus {
+    outline: none;
+    border-color: #C42020;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(196, 32, 32, 0.1); /* Brilho vermelho suave */
+}
+
+/* Placeholder */
+.input::placeholder {
+    color: #aaa;
+    font-weight: 400;
+}
+
+/* --- CAMPO ESPECIAL: PLACA --- */
+.inputPlaca {
+    text-transform: uppercase; /* Força maiúsculas */
+    font-family: 'Consolas', 'Monaco', monospace; /* Fonte de código para parecer placa */
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    font-size: 1.2rem;
+    background-image: url('/placa.png'); /* Sua imagem */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 40px; /* Ajuste conforme sua imagem */
+    padding-right: 50px; /* Espaço para a imagem não cobrir o texto */
+}
+
+/* --- CAMPO ESPECIAL: DINHEIRO (Input Group) --- */
+.inputGroup {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    /* background-color: blueviolet; */
 }
-.input{
-    width: 100%;
-    align-self: center;
-    margin-top: 0.5rem; 
-    border-radius: 5px;
-    padding: 0.5rem;
-    border: 1px solid #C42020;
-    font-size: 1rem;
-}
-.inputPlaca{
 
-    width:fit-content;
-    height: 4rem;
-    align-self: center;
-    margin-top: 0.5rem; 
-    border-radius: 5px;
-    /* padding: 0.5rem 2.5rem 0.5rem 0.5rem; */
-    border: 1px transparent ;
-    font-size: 1rem;
-    background-image: url('/placa.png');
-    background-repeat: no-repeat;
-    /* background-position: right 0.5rem center; */
-    background-size: contain;
-    text-align: center;
+.currencySymbol {
+    position: absolute;
+    left: 12px;
+    color: #666;
+    font-weight: bold;
+    font-size: 0.95rem;
+    pointer-events: none; /* O clique passa através dele */
 }
-.label
-{
-    align-self: flex-start;
-    margin-top: 0.5rem; 
+
+.inputMoney {
+    padding-left: 40px; /* Espaço para o "R$" */
+    text-align: right;  /* Números ficam melhores alinhados à direita */
+}
+
+/* Botão Principal */
+.mainButton {
+    margin-top: 1.5rem;
+    padding: 0.9rem;
     font-size: 1.1rem;
-    font-weight: 500;
-    color:#8b2c2c;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.input::placeholder{
-    font-size: 1rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.mainButton{
-    padding:0.5rem;
-    width: 75%;
-    font-size: large;
-    margin-top: 1rem;
-    border: 2px solid #C42020;
-    border-radius: 10px;
-    color: #C42020;
-}
-.mainButton:hover{
-    background-color: #C42020;
+    font-weight: bold;
     color: white;
+    background-color: #C42020;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    width: 100%;
 }
+
+.mainButton:hover {
+    background-color: #a01a1a; /* Vermelho mais escuro */
+    transform: translateY(-2px); /* Leve subida */
+    box-shadow: 0 4px 10px rgba(196, 32, 32, 0.3);
+}
+
+.mainButton:active {
+    transform: translateY(0);
+}
+
+/* Checkbox Container */
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0.5rem;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #C42020; /* Cor do check nativo */
+}
+
+/* Info Box (para Transferências) */
 .infoVeiculo {
-  background-color: #f9f9f9;
-  border-left: 4px solid #C42020;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
+    background-color: #fff5f5; /* Fundo avermelhado bem claro */
+    border-left: 4px solid #C42020;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    width: 100%;
 }
 
 .infoVeiculo p {
-  margin: 0.5rem 0;
-  font-size: 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    color: #555;
 }

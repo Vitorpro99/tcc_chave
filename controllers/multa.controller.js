@@ -12,12 +12,10 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Cria o objeto Multa
     const multa = {
         data:       req.body.data,
         valor:      req.body.valor,
         descricao:  req.body.descricao,
-        // Geralmente uma multa está associada a um veículo e/ou um usuário (condutor)
         veiculoId:  req.body.veiculoId,
         usuarioId:  req.body.usuarioId
     };

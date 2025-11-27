@@ -86,7 +86,7 @@ exports.getRelatorioMultas = async (req, res) => {
             include: [{
                 model: Veiculo,
                 as: 'veiculo',
-                where: filtroSetor, // Filtra veículos pelo setor do usuário
+                where: filtroSetor,
                 include: [{ model: Setor, as: 'setor' }]
             }],
             order: [['data', 'DESC']]
@@ -95,7 +95,7 @@ exports.getRelatorioMultas = async (req, res) => {
         res.send(relatorio);
 
     } catch (err) {
-        console.error("Erro no relatório de multas:", err); // Veja este erro no terminal se falhar
+        console.error("Erro no relatório de multas:", err);
         res.status(500).send({ message: "Erro ao gerar relatório: " + err.message });
     }
 };
