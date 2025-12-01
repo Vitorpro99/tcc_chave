@@ -1,12 +1,34 @@
 const config = require("../config/db.config.js");
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize(
-    config.DB,
-    config.USER,
-    config.PASSWORD,
-    config
-);
+let sequelize;
+
+// --- MUDANÇA PRINCIPAL: LÓGICA DE CONEXÃO ---
+
+// 1. Se existir a variável DATABASE_URL (Modo Render/Produção)
+if (process.env.DATABASE_URL) {
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: "postgres",
+        protocol: "postgres",
+        dialectOptions: {
+            ssl: {
+                require: true, // OBRIGA O USO DE SSL
+                rejectUnauthorized: false // Aceita o certificado do Render sem reclamar
+            }
+        },
+        logging: false // Limpa o terminal (opcional)
+    });
+} 
+// 2. Caso contrário, usa a config local (Modo Desenvolvimento no seu PC)
+else {
+    sequelize = new Sequelize(
+        config.DB,
+        config.USER,
+        config.PASSWORD,
+        config
+    );
+}
+// ---------------------------------------------
 
 const db = {};
 
@@ -44,20 +66,18 @@ db.setor.hasMany(db.veiculo, {
     as: 'veiculosSetor',
     foreignKey: 'setorId'
 });
-// CORREÇÃO IMPORTANTE: Adicionado as: 'setor' para bater com o Controller
 db.veiculo.belongsTo(db.setor, {
-    as: 'setor', // <--- ESTA LINHA É OBRIGATÓRIA
+    as: 'setor', 
     foreignKey: 'setorId'
 });
 
-// --- 3. Veículo e IPVA (1:N) ---
-// Um veículo tem muitos IPVAs (histórico)
+// --- 3. Veículo e IPVA ---
 db.veiculo.hasMany(db.ipva, {
     as: 'ipvaVeiculo', 
     foreignKey: 'veiculoId'
 });
 db.ipva.belongsTo(db.veiculo, {
-    as: 'veiculo', // Simplificado
+    as: 'veiculo',
     foreignKey: 'veiculoId'
 });
 
@@ -67,7 +87,7 @@ db.veiculo.hasMany(db.manutencao, {
     foreignKey: 'veiculoId'
 });
 db.manutencao.belongsTo(db.veiculo, {
-    as: 'veiculo', // É útil ter o inverso também
+    as: 'veiculo',
     foreignKey: 'veiculoId'
 });
 
@@ -92,18 +112,14 @@ db.multa.belongsTo(db.veiculo, {
 });
 
 // --- 7. Transferências ---
-// Veículo
 db.veiculo.hasMany(db.transferencia, { foreignKey: 'veiculoId' });
 db.transferencia.belongsTo(db.veiculo, { foreignKey: 'veiculoId', as: 'veiculo' });
 
-// Solicitante (Usuário)
 db.usuario.hasMany(db.transferencia, { foreignKey: 'usuarioSolicitanteId' });
 db.transferencia.belongsTo(db.usuario, { foreignKey: 'usuarioSolicitanteId', as: 'solicitante' });
 
-// Setor Origem
 db.setor.hasMany(db.transferencia, { foreignKey: 'setorOrigemId' });
 db.transferencia.belongsTo(db.setor, { foreignKey: 'setorOrigemId', as: 'setorOrigem' });
 
-// Setor Destino
 db.setor.hasMany(db.transferencia, { foreignKey: 'setorDestinoId' });
 db.transferencia.belongsTo(db.setor, { foreignKey: 'setorDestinoId', as: 'setorDestino' });

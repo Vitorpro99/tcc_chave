@@ -1,3 +1,6 @@
+require("dotenv").config();
+
+
 const express = require("express");
 const bodyPhaser = require("body-parser");
 
@@ -24,7 +27,7 @@ app.use(express.urlencoded({extended:true}));
 const db = require("./models")
 
 db.sequelize
-    .sync({alter:true})
+    .sync({force:true})
     .then(() =>{
         console.log("Ola mundo!");
     })
