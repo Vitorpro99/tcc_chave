@@ -44,7 +44,7 @@ module.exports = (app) =>{
     
     router.get("/:id", [verifyToken],veiculo.findOne);
     
-    router.put("/:id",veiculo.update);
+    router.put("/:id",[verifyToken],veiculo.update);
     
     router.delete("/:id",veiculo.delete);
 
