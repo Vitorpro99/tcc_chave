@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended:true}));
 const db = require("./models")
 
 db.sequelize
-    .sync({force:true})
+    .sync({alter:true})
     .then(() =>{
         console.log("Ola mundo!");
     })
