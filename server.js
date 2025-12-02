@@ -12,7 +12,7 @@ app.get("/", function (req,res){
     res.send("Chave pra chave")
 });
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(express.json());
 
