@@ -12,13 +12,6 @@ app.get("/", function (req,res){
     res.send("Chave pra chave")
 });
 
-var corsOptions = {
-
-    origin:["http://localhost:3000",
-        "https://keycontrol-tcc.vercel.app"
-    ]
-}
-
 app.use(cors(corsOptions));
 
 app.use(express.json());
