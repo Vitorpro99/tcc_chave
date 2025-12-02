@@ -14,8 +14,9 @@ app.get("/", function (req,res){
 
 var corsOptions = {
 
-    origin:"http://localhost:3000"
-
+    origin:["http://localhost:3000",
+        "https://keycontrol-tcc.vercel.app"
+    ]
 }
 
 app.use(cors(corsOptions));
