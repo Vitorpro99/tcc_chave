@@ -72,17 +72,9 @@ exports.findOne = async (req, res) => {
     const id = req.params.id;
     const userId = req.userId;
 
-    console.log("=================================");
-    console.log("DEBUG: ID do Veículo solicitado:", id);
-    console.log("DEBUG: ID do Usuário vindo do Token:", userId);
-
     try {
         const usuario = await Usuario.findByPk(userId);
-
-        console.log("DEBUG: Resultado da busca no banco:", usuario);
-        console.log("=================================");
         
-        // SEGURANÇA: Verifica se o usuário existe
         if (!usuario) {
             return res.status(401).send({ message: "Usuário não encontrado. Faça login novamente." });
         }
@@ -92,7 +84,9 @@ exports.findOne = async (req, res) => {
                 { model: db.setor, as: 'setor' }, 
                 { model: db.manutencao, as: 'manutencoes' },
                 { model: db.multa, as: 'multas' },
-                { model: db.ipva, as: 'ipvaVeiculo' }
+                { model: db.ipva, as: 'ipvaVeiculo' },
+                { model: db.seguro, as: 'seguro' } 
+                // ---------------------------------
             ]
         });
 
@@ -100,7 +94,6 @@ exports.findOne = async (req, res) => {
             return res.status(404).send({ message: "Veículo não encontrado." });
         }
 
-        // Segurança de Setor
         if (!usuario.admin && veiculo.setorId !== usuario.setorId) {
             return res.status(403).send({ message: "Acesso negado a este veículo." });
         }
